@@ -1,0 +1,34 @@
+{
+  "name": "vtx-insights",
+  "version": "1.0.0",
+  "description": "Analyze public VTX trading data with the read-only VTX Insights MCP server.",
+  "author": {
+    "name": "DataDoesYou LLC",
+    "url": "https://vtxmacro.com"
+  },
+  "homepage": "https://vtxmacro.com/insights",
+  "repository": "https://github.com/DataDoesYou/VTX-Insights",
+  "keywords": ["vtx", "trading", "analytics", "mcp", "read-only"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "VTX Insights",
+    "shortDescription": "Read-only VTX trading analysis",
+    "longDescription": "Analyze your bots, any public VTX profile, or the whole platform with complete coverage and provenance through a dedicated read-only MCP server.",
+    "developerName": "DataDoesYou LLC",
+    "category": "Finance",
+    "capabilities": [
+      "Read-only trading analytics",
+      "Public profile and platform comparison",
+      "Decision and execution evidence",
+      "Immutable large-result artifacts"
+    ],
+    "websiteURL": "https://vtxmacro.com/insights",
+    "privacyPolicyURL": "https://vtxmacro.com/privacy",
+    "termsOfServiceURL": "https://vtxmacro.com/terms",
+    "brandColor": "#10B981",
+    "composerIcon": "./assets/vtx-insights.png",
+    "logo": "./assets/vtx-insights.png",
+    "defaultPrompt": "Use VTX Insights to compare my bots this month. Inspect coverage and provenance, calculate anything needed, and explain which model is performing best."
+  },
+  "mcpServers": "./.mcp.json"
+}

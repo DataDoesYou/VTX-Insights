@@ -1,0 +1,21 @@
+{
+  "name": "vtx-insights",
+  "interface": {
+    "displayName": "VTX Insights",
+    "description": "Read-only VTX trading analysis for Codex."
+  },
+  "plugins": [
+    {
+      "name": "vtx-insights",
+      "source": {
+        "source": "local",
+        "path": "./plugins/vtx-insights"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Finance"
+    }
+  ]
+}

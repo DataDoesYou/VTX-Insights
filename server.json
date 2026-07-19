@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.DataDoesYou/vtx-insights",
+  "title": "VTX Insights",
+  "description": "Read-only analysis of public VTX trading data with complete coverage and provenance.",
+  "version": "1.0.0",
+  "websiteUrl": "https://vtxmacro.com/insights",
+  "repository": {
+    "url": "https://github.com/DataDoesYou/VTX-Insights",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://api.vtxmacro.com/insights/mcp"
+    }
+  ]
+}

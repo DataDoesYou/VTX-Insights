@@ -1,0 +1,24 @@
+{
+  "name": "vtx-insights",
+  "owner": {
+    "name": "DataDoesYou LLC"
+  },
+  "description": "Read-only VTX trading analysis plugins.",
+  "version": "1.0.0",
+  "plugins": [
+    {
+      "name": "vtx-insights",
+      "displayName": "VTX Insights",
+      "source": "./plugins/vtx-insights",
+      "description": "Analyze public VTX trading data through the read-only VTX Insights MCP server.",
+      "version": "1.0.0",
+      "author": {
+        "name": "DataDoesYou LLC"
+      },
+      "homepage": "https://vtxmacro.com/insights",
+      "repository": "https://github.com/DataDoesYou/VTX-Insights",
+      "category": "Finance",
+      "tags": ["trading", "analytics", "mcp", "read-only"]
+    }
+  ]
+}

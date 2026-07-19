@@ -1,0 +1,15 @@
+{
+  "name": "vtx-insights",
+  "displayName": "VTX Insights",
+  "version": "1.0.0",
+  "description": "Analyze public VTX trading data through the read-only VTX Insights MCP server.",
+  "author": {
+    "name": "DataDoesYou LLC"
+  },
+  "logo": "./assets/vtx-insights.png",
+  "homepage": "https://vtxmacro.com/insights",
+  "repository": "https://github.com/DataDoesYou/VTX-Insights",
+  "keywords": ["vtx", "trading", "analytics", "mcp", "read-only"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

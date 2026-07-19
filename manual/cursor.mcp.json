@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "vtx-insights": {
+      "type": "http",
+      "url": "https://api.vtxmacro.com/insights/mcp"
+    }
+  }
+}
