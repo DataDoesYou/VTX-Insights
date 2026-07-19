@@ -1,26 +1,26 @@
 {
   "name": "vtx-insights",
-  "version": "1.0.0",
-  "description": "Analyze public VTX trading data with the read-only VTX Insights MCP server.",
+  "version": "1.1.0",
+  "description": "Analyze, optimize, automate, and trade VTX with separately approved permissions.",
   "author": {
     "name": "DataDoesYou LLC",
     "url": "https://vtxmacro.com"
   },
   "homepage": "https://vtxmacro.com/insights",
   "repository": "https://github.com/DataDoesYou/VTX-Insights",
-  "keywords": ["vtx", "trading", "analytics", "mcp", "read-only"],
+  "keywords": ["vtx", "trading", "analytics", "automation", "mcp"],
   "skills": "./skills/",
   "interface": {
     "displayName": "VTX Insights",
-    "shortDescription": "Read-only VTX trading analysis",
-    "longDescription": "Analyze your bots, any public VTX profile, or the whole platform with complete coverage and provenance through a dedicated read-only MCP server.",
+    "shortDescription": "VTX analysis and trading automation",
+    "longDescription": "Analyze your bots or the public platform, optimize settings on profiles you own, control Server Mode automation, and place explicitly requested orders with separately approved permissions.",
     "developerName": "DataDoesYou LLC",
     "category": "Finance",
     "capabilities": [
-      "Read-only trading analytics",
+      "Trading analytics and strategy comparison",
       "Public profile and platform comparison",
       "Decision and execution evidence",
-      "Immutable large-result artifacts"
+      "Owned-profile settings, bot control, and trading"
     ],
     "websiteURL": "https://vtxmacro.com/insights",
     "privacyPolicyURL": "https://vtxmacro.com/privacy",
@@ -28,7 +28,7 @@
     "brandColor": "#10B981",
     "composerIcon": "./assets/vtx-insights.png",
     "logo": "./assets/vtx-insights.png",
-    "defaultPrompt": "Use VTX Insights to compare my bots this month. Inspect coverage and provenance, calculate anything needed, and explain which model is performing best."
+    "defaultPrompt": "Use VTX Insights to compare my bots this month, recommend the highest-impact settings improvements, and ask before applying them."
   },
   "mcpServers": "./.mcp.json"
 }

@@ -1,20 +1,26 @@
 {
   "schema_version": 1,
-  "package_version": "1.0.0",
+  "package_version": "1.1.0",
   "server_contract": {
     "minimum": 1,
     "maximum": 1
   },
   "mcp_protocol_version": "2025-11-25",
   "oauth_scope": "insights:read",
+  "oauth_scopes": [
+    "insights:read",
+    "insights:settings",
+    "insights:control",
+    "insights:trade"
+  ],
   "hosts": {
     "codex": {
       "listing_status": "published",
-      "native_inference_verified": false
+      "native_inference_verified": true
     },
     "claude_code": {
       "listing_status": "published",
-      "native_inference_verified": false
+      "native_inference_verified": true
     },
     "cursor": {
       "listing_status": "submission_pending",

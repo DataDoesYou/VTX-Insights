@@ -2,7 +2,7 @@
   "name": "vtx-insights",
   "interface": {
     "displayName": "VTX Insights",
-    "description": "Read-only VTX trading analysis for Codex."
+    "description": "VTX analysis, bot optimization, automation, and trading for Codex."
   },
   "plugins": [
     {

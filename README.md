@@ -1,17 +1,17 @@
 # VTX Insights
 
-VTX Insights connects Codex, Claude Code, Cursor, and supported GitHub Copilot surfaces to the same dedicated read-only VTX MCP server. It contains no VTX backend, database, model runtime, or credential.
+VTX Insights connects Codex, Claude Code, Cursor, and supported GitHub Copilot surfaces to VTX analysis, bot optimization, automation controls, and trading on profiles the user owns.
 
 Remote server: `https://api.vtxmacro.com/insights/mcp`
 
-The server can analyze the signed-in user's bots, named public VTX profiles or wallets, and the whole public platform. It never exposes email addresses, login or authentication data, billing or contact data, credentials, tokens, or secrets.
+Analyze the signed-in user's bots, named public VTX profiles or wallets, or the whole public platform. Settings, automation, and trading actions work only for profiles the user owns and require separately approved permissions.
 
 ## Codex
 
 ```bash
 codex plugin marketplace add DataDoesYou/VTX-Insights
 codex plugin add vtx-insights@vtx-insights
-codex mcp login vtx-insights --scopes insights:read
+codex mcp login vtx-insights --scopes insights:read,insights:settings,insights:control,insights:trade
 ```
 
 Refresh or remove the plugin with `codex plugin marketplace upgrade vtx-insights` and `codex plugin remove vtx-insights@vtx-insights`. Codex desktop users can disable it from Settings > Plugins. The manual MCP fallback is in `manual/codex.config.toml`.
@@ -36,8 +36,8 @@ MCP Registry publication is pending because the Registry requires the production
 
 ## Use
 
-Start with: “Compare my bots this month. Inspect coverage and provenance, calculate anything needed, and explain which model is performing best.”
+Start with: “Compare my bots this month, recommend the highest-impact settings improvements, and ask before applying them.”
 
-Every answer still requires evidence review. Inspect coverage, provenance, as-of times, warnings, and any large-result artifact before accepting a conclusion.
+The connected model chooses the tools, reasoning, and answer. VTX does not grade, rewrite, or verify model responses or conclusions. The available VTX permissions are `insights:read`, `insights:settings`, `insights:control`, and `insights:trade`; approve only what this agent should be able to do.
 
 Setup, grant management, compatibility status, privacy details, and troubleshooting live at https://vtxmacro.com/insights.
