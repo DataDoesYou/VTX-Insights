@@ -9,11 +9,11 @@
   "oauth_scope": "insights:read",
   "hosts": {
     "codex": {
-      "listing_status": "source_ready_publication_pending",
+      "listing_status": "published",
       "native_inference_verified": false
     },
     "claude_code": {
-      "listing_status": "source_ready_publication_pending",
+      "listing_status": "published",
       "native_inference_verified": false
     },
     "cursor": {
