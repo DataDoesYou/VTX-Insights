@@ -1,6 +1,8 @@
 # VTX Insights
 
-VTX Insights connects Codex, Claude Code, Cursor, and supported GitHub Copilot surfaces to VTX analysis, bot optimization, automation controls, and trading on profiles the user owns.
+VTX Insights connects Codex, Claude Code, Cursor, supported GitHub Copilot surfaces, and Google Antigravity to VTX analysis, bot optimization, automation controls, and trading on profiles the user owns.
+
+Long analyses use durable `analysis.start` and `analysis.status` tools, then return a complete immutable artifact. A host response timeout never requires silently sampling or narrowing the requested VTX population.
 
 Remote server: `https://api.vtxmacro.com/insights/mcp`
 
@@ -33,6 +35,14 @@ The public Marketplace submission is pending. Until it is accepted, add the remo
 ## GitHub Copilot
 
 MCP Registry publication is pending because the Registry requires the production remote endpoint to be publicly reachable. The current VS Code/Copilot OAuth fallback is `manual/copilot.mcp.json`: place it at `.vscode/mcp.json`, start the server, and select **Auth** above the server entry.
+
+## Google Antigravity
+
+Antigravity has a searchable MCP Store, but VTX Insights is not currently listed there. Open **Settings > Customizations > Installed MCP Servers > Add MCP**, then use **Manage MCP Servers > View raw config** with `manual/antigravity.mcp.json`. The same file works globally at `~/.gemini/config/mcp_config.json` or in one workspace at `.agents/mcp_config.json`. Do not add a bearer token or client secret.
+
+After saving the server, select **Authenticate**, complete VTX sign-in in the browser, copy the authorization code back into Antigravity, and select **Submit**. Dynamic client registration creates the client automatically, but this user confirmation flow is still required.
+
+For a versioned plugin fallback, copy `plugins/vtx-insights` to `.agents/plugins/vtx-insights` or `_agents/plugins/vtx-insights` for one workspace, or to `~/.gemini/config/plugins/vtx-insights` globally. Its root `plugin.json` and `mcp_config.json` expose the same server and reuse the shared VTX Insights skill.
 
 ## Use
 

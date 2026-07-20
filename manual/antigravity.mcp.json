@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "vtx-insights": {
+      "serverUrl": "https://api.vtxmacro.com/insights/mcp"
+    }
+  }
+}

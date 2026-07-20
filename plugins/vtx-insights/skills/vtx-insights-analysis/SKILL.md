@@ -9,6 +9,8 @@ Use VTX Insights as the VTX trading-data and action source. The user chooses ana
 
 - Resolve the requested population explicitly: the user's profiles, named public handles or wallets, or the whole public VTX platform.
 - Inspect returned coverage, provenance, as-of times, warnings, and artifact manifests before making completeness claims.
+- For a large population, a potentially long computation, or any synchronous response timeout, call `analysis.start` with the intended read capability and its unchanged arguments. Poll `analysis.status` until it returns the immutable artifact, then inspect that artifact. Do not narrow or sample the user's request merely to fit one request window.
+- For max-exposure or retained trading-limit questions over large decision populations, use `decision.context` with `result_view=exposure_metrics`; use `context_rows` when individual decision context is required.
 - Preserve the distinction between observed history and a replayed counterfactual. Never describe a replay as a live result.
 - Use the host's native web, file, terminal, and calculation tools when they materially improve the answer.
 - Use your own judgment for tools, calculations, recommendations, and the final answer. VTX does not grade, rewrite, or verify it.
