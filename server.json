@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.DataDoesYou/vtx-insights",
   "title": "VTX Insights",
-  "description": "VTX trading analysis, bot optimization, automation controls, and orders on profiles the user owns.",
-  "version": "2026.7.19",
+  "description": "VTX trading analysis, fleet profiles, write-only connections, automation controls, and orders on profiles the user owns.",
+  "version": "2026.7.27",
   "websiteUrl": "https://vtxmacro.com/insights",
   "repository": {
     "url": "https://github.com/DataDoesYou/VTX-Insights",

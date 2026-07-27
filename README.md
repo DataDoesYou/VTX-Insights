@@ -1,19 +1,19 @@
 # VTX Insights
 
-VTX Insights connects Codex, Claude Code, Cursor, supported GitHub Copilot surfaces, and Google Antigravity to VTX analysis, bot optimization, automation controls, and trading on profiles the user owns.
+VTX Insights connects Codex, Claude Code, Cursor, supported GitHub Copilot surfaces, and Google Antigravity to VTX analysis, bot optimization, fleet profile management, write-only provider/exchange connections, Trader and Assistant controls, and complete trading operations on profiles the user owns.
 
 Long analyses use durable `analysis.start` and `analysis.status` tools, then return a complete immutable artifact. A host response timeout never requires silently sampling or narrowing the requested VTX population.
 
 Remote server: `https://api.vtxmacro.com/insights/mcp`
 
-Analyze the signed-in user's bots, named public VTX profiles or wallets, or the whole public platform. Settings, automation, and trading actions work only for profiles the user owns and require separately approved permissions.
+Analyze the signed-in user's bots, named public VTX profiles or wallets, or the whole public platform. Settings, profile, connection, automation, and trading actions work only for profiles the user owns and require separately approved permissions. Connection values are write-only and cannot be read back through Insights. Trading includes market, limit, trigger, and scale orders; order and TWAP cancellation; leverage changes; one-position or confirmed all-position closes; and resumable heterogeneous fleet batches.
 
 ## Codex
 
 ```bash
 codex plugin marketplace add DataDoesYou/VTX-Insights
 codex plugin add vtx-insights@vtx-insights
-codex mcp login vtx-insights --scopes insights:read,insights:settings,insights:control,insights:trade
+codex mcp login vtx-insights --scopes insights:read,insights:settings,insights:control,insights:trade,insights:profiles,insights:credentials
 ```
 
 Refresh or remove the plugin with `codex plugin marketplace upgrade vtx-insights` and `codex plugin remove vtx-insights@vtx-insights`. Codex desktop users can disable it from Settings > Plugins. The manual MCP fallback is in `manual/codex.config.toml`.
@@ -48,6 +48,6 @@ For a versioned plugin fallback, copy `plugins/vtx-insights` to `.agents/plugins
 
 Start with: “Compare my bots this month, recommend the highest-impact settings improvements, and ask before applying them.”
 
-The connected model chooses the tools, reasoning, and answer. VTX does not grade, rewrite, or verify model responses or conclusions. The available VTX permissions are `insights:read`, `insights:settings`, `insights:control`, and `insights:trade`; approve only what this agent should be able to do.
+The connected model chooses the tools, reasoning, and answer. VTX does not grade, rewrite, or verify model responses or conclusions. The available VTX permissions are `insights:read`, `insights:settings`, `insights:control`, `insights:trade`, `insights:profiles`, and `insights:credentials`; approve only what this agent should be able to do.
 
 Setup, grant management, compatibility status, privacy details, and troubleshooting live at https://vtxmacro.com/insights.
