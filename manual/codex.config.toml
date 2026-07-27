@@ -1,2 +1,3 @@
 [mcp_servers.vtx-insights]
 url = "https://api.vtxmacro.com/insights/mcp"
+tool_timeout_sec = 120
