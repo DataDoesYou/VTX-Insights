@@ -1,7 +1,7 @@
 {
   "name": "vtx-insights",
   "displayName": "VTX Insights",
-  "version": "2026.7.27",
+  "version": "2026.7.28",
   "description": "Analyze, optimize, automate, and trade VTX with separately approved permissions.",
   "author": {
     "name": "DataDoesYou LLC"
