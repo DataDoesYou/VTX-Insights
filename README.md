@@ -23,7 +23,18 @@ codex plugin add vtx-insights@vtx-insights
 codex mcp login vtx-insights --scopes insights:read,insights:settings,insights:control,insights:trade,insights:profiles,insights:credentials
 ```
 
-Refresh or remove the plugin with `codex plugin marketplace upgrade vtx-insights` and `codex plugin remove vtx-insights@vtx-insights`. Codex desktop users can disable it from Settings > Plugins. The manual MCP fallback is in `manual/codex.config.toml`.
+Start a new Codex session after installation so the bundled skills and tools are
+discovered. To update an existing cached installation:
+
+```bash
+codex plugin marketplace upgrade vtx-insights
+codex plugin remove vtx-insights@vtx-insights
+codex plugin add vtx-insights@vtx-insights
+```
+
+Start another new session and reauthenticate if prompted. Codex desktop users
+can disable the plugin from Settings > Plugins. The manual MCP fallback is in
+`manual/codex.config.toml`.
 
 ## Claude Code
 

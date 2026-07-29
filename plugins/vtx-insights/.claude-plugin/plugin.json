@@ -1,13 +1,13 @@
 {
   "name": "vtx-insights",
-  "description": "Analyze, optimize, automate, and trade VTX with separately approved permissions.",
-  "version": "2026.7.29",
+  "description": "Reconstruct bot trade chains, optimize, automate, and trade VTX with separately approved permissions.",
+  "version": "2026.729.1",
   "author": {
     "name": "DataDoesYou LLC"
   },
   "homepage": "https://vtxmacro.com/insights",
   "repository": "https://github.com/DataDoesYou/VTX-Insights",
-  "keywords": ["vtx", "trading", "analytics", "automation", "mcp"],
+  "keywords": ["vtx", "trading", "trade-chain", "analytics", "automation", "mcp"],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json"
 }

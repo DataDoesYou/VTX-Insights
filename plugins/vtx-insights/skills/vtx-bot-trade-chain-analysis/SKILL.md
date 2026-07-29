@@ -19,7 +19,9 @@ diagnosing from aggregate PnL alone.
 - Resolve the requested population explicitly: owned profiles, named public
   handles or wallets, or the whole public platform.
 - Use profile names in the answer. Do not expose internal IDs, credentials,
-  tokens, private prompts, or raw reasoning traces.
+  tokens, or unauthorized private data. When an authorized owner explicitly
+  requests exact retained prompts, responses, or reasoning—or those bytes are
+  materially necessary—use the verbatim tool contract and state the scope.
 - Treat model reasoning as evidence, not truth. VTX supplies tools and
   calculations but does not grade, correct, or rewrite the final analysis.
 - Never impose a population, row, byte, history, or analysis-duration cap.
