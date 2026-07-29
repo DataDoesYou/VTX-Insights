@@ -1,22 +1,23 @@
 {
   "name": "vtx-insights",
   "version": "2026.7.29",
-  "description": "Analyze, optimize, automate, and trade VTX with separately approved permissions.",
+  "description": "Reconstruct bot trade chains, optimize, automate, and trade VTX with separately approved permissions.",
   "author": {
     "name": "DataDoesYou LLC",
     "url": "https://vtxmacro.com"
   },
   "homepage": "https://vtxmacro.com/insights",
   "repository": "https://github.com/DataDoesYou/VTX-Insights",
-  "keywords": ["vtx", "trading", "analytics", "automation", "mcp"],
+  "keywords": ["vtx", "trading", "trade-chain", "analytics", "automation", "mcp"],
   "skills": "./skills/",
   "interface": {
     "displayName": "VTX Insights",
     "shortDescription": "VTX analysis and trading automation",
-    "longDescription": "Analyze your bots or the public platform, optimize settings on profiles you own, control Server Mode automation, and place explicitly requested orders with separately approved permissions.",
+    "longDescription": "Reconstruct complete bot trade chains, analyze your bots or the public platform, optimize settings on profiles you own, control Server Mode automation, and place explicitly requested orders with separately approved permissions.",
     "developerName": "DataDoesYou LLC",
     "category": "Finance",
     "capabilities": [
+      "Complete bot trade-chain reconstruction",
       "Trading analytics and strategy comparison",
       "Public profile and platform comparison",
       "Decision and execution evidence",
@@ -28,7 +29,7 @@
     "brandColor": "#10B981",
     "composerIcon": "./assets/vtx-insights.png",
     "logo": "./assets/vtx-insights.png",
-    "defaultPrompt": "Use VTX Insights to compare my bots this month, recommend the highest-impact settings improvements, and ask before applying them."
+    "defaultPrompt": "Use the bundled VTX trade-chain analysis skill to explain why my bots are winning or losing, recommend the smallest evidence-backed improvements, and ask before applying them."
   },
   "mcpServers": "./.mcp.json"
 }

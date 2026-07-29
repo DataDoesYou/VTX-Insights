@@ -2,7 +2,7 @@
   "name": "vtx-insights",
   "interface": {
     "displayName": "VTX Insights",
-    "description": "VTX analysis, bot optimization, automation, and trading for Codex."
+    "description": "Complete bot trade-chain analysis, optimization, automation, and trading for Codex."
   },
   "plugins": [
     {

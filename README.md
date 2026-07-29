@@ -4,6 +4,13 @@ VTX Insights connects Codex, Claude Code, Cursor, supported GitHub Copilot surfa
 
 Long analyses use durable `analysis.start` and `analysis.status` tools, then return a complete immutable artifact. A host response timeout never requires silently sampling or narrowing the requested VTX population.
 
+The connector installs two skills with the MCP server. `vtx-insights-analysis`
+covers the complete VTX analysis and action surface.
+`vtx-bot-trade-chain-analysis` is the flagship deep-analysis workflow: it
+reconstructs settings generations, decisions, executions, fills, position
+changes, exits, fees, funding, PnL, and market context before recommending a
+focused bot improvement.
+
 Remote server: `https://api.vtxmacro.com/insights/mcp`
 
 Analyze the signed-in user's bots, named public VTX profiles or wallets, or the whole public platform. Settings, profile, connection, automation, and trading actions work only for profiles the user owns and require separately approved permissions. Connection values are write-only and cannot be read back through Insights. Trading includes market, limit, trigger, and scale orders; order and TWAP cancellation; leverage changes; one-position or confirmed all-position closes; and resumable heterogeneous fleet batches.
@@ -46,7 +53,7 @@ For a versioned plugin fallback, copy `plugins/vtx-insights` to `.agents/plugins
 
 ## Use
 
-Start with: “Compare my bots this month, recommend the highest-impact settings improvements, and ask before applying them.”
+Start with: “Use the VTX bot trade-chain analysis skill to explain why my bots are winning or losing, recommend the smallest evidence-backed improvements, and ask before applying them.”
 
 The connected model chooses the tools, reasoning, and answer. VTX does not grade, rewrite, or verify model responses or conclusions. The available VTX permissions are `insights:read`, `insights:settings`, `insights:control`, `insights:trade`, `insights:profiles`, and `insights:credentials`; approve only what this agent should be able to do.
 

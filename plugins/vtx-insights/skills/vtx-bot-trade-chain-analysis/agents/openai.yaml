@@ -1,0 +1,11 @@
+interface:
+  display_name: "VTX Bot Trade-Chain Analysis"
+  short_description: "Explain bot wins and losses from complete evidence"
+  default_prompt: "Use $vtx-bot-trade-chain-analysis to analyze why my bots are winning or losing and recommend the smallest evidence-backed improvements."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "vtx-insights"
+      description: "Authoritative VTX trading evidence and scoped actions"
+      transport: "streamable_http"
+      url: "https://api.vtxmacro.com/insights/mcp"
