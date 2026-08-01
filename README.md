@@ -36,7 +36,7 @@ Start another new session and reauthenticate if prompted. Codex desktop users
 can disable the plugin from Settings > Plugins. The manual MCP fallback is in
 `manual/codex.config.toml`.
 
-After updating, confirm the installed manifest reports only `2026.8.6` before
+After updating, confirm the installed manifest reports only `2026.8.7` before
 starting the new session.
 
 ## Claude Code
@@ -51,7 +51,7 @@ The one-time version-format migration sorts below the retired packed-date
 version, so an ordinary Claude update can leave the old package installed. Run
 `claude plugin marketplace update vtx-insights`, then
 `claude plugin uninstall vtx-insights@vtx-insights`, then
-`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.8.6`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
+`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.8.7`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
 `vtx-insights@vtx-insights` for later lifecycle changes. The manual fallback is
 in `manual/claude.mcp.json`.
 
