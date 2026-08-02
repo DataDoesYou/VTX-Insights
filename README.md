@@ -2,7 +2,9 @@
 
 VTX Insights connects Codex, Claude Code, Cursor, supported GitHub Copilot surfaces, and Google Antigravity to VTX analysis, bot optimization, fleet profile management, write-only provider/exchange connections, Trader and Assistant controls, and complete trading operations on profiles the user owns.
 
-Long analyses use durable `analysis.start` and `analysis.status` tools, then return a complete immutable artifact. A host response timeout never requires silently sampling or narrowing the requested VTX population.
+Long analyses use durable `analysis.start` and `analysis.status` tools, then return a complete immutable artifact. Complete retrieval acknowledges exact chunk hashes through `artifact.resume`, so an interrupted host can continue from its durable checkpoint. A host response timeout never requires silently sampling or narrowing the requested VTX population.
+
+Artifact chunks are lossless: read `text` as UTF-8 bytes when `encoding=utf-8`, or decode `base64_data` when `encoding=base64`, then verify the raw `byte_count` and `content_hash` before acknowledging the chunk.
 
 The connector installs two skills with the MCP server. `vtx-insights-analysis`
 covers the complete VTX analysis and action surface.
@@ -13,7 +15,7 @@ focused bot improvement.
 
 Remote server: `https://api.vtxmacro.com/insights/mcp`
 
-Analyze the signed-in user's bots, named public VTX profiles or wallets, or the whole public platform. Settings, profile, connection, automation, and trading actions work only for profiles the user owns and require separately approved permissions. Connection values are write-only and cannot be read back through Insights. Trading includes market, limit, trigger, and scale orders; order and TWAP cancellation; leverage changes; one-position or confirmed all-position closes; and resumable heterogeneous fleet batches.
+Analyze the signed-in user's bots, named public VTX profiles or wallets, or the whole public platform. Settings, profile, connection, automation, and trading actions work only for profiles the user owns and require separately approved permissions. Bot status and Start cover exact Server/Client cohorts; a Client start saves desired Trader intent without taking over an owner and remains waiting until eligible live ownership is confirmed. Connection values are write-only and cannot be read back through Insights. Trading includes market, limit, trigger, and scale orders; order and TWAP cancellation; leverage changes; one-position or confirmed all-position closes; and resumable heterogeneous fleet batches.
 
 ## Codex
 
@@ -36,7 +38,7 @@ Start another new session and reauthenticate if prompted. Codex desktop users
 can disable the plugin from Settings > Plugins. The manual MCP fallback is in
 `manual/codex.config.toml`.
 
-After updating, confirm the installed manifest reports only `2026.8.7` before
+After updating, confirm the installed manifest reports only `2026.8.8` before
 starting the new session.
 
 ## Claude Code
@@ -51,7 +53,7 @@ The one-time version-format migration sorts below the retired packed-date
 version, so an ordinary Claude update can leave the old package installed. Run
 `claude plugin marketplace update vtx-insights`, then
 `claude plugin uninstall vtx-insights@vtx-insights`, then
-`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.8.7`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
+`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.8.8`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
 `vtx-insights@vtx-insights` for later lifecycle changes. The manual fallback is
 in `manual/claude.mcp.json`.
 

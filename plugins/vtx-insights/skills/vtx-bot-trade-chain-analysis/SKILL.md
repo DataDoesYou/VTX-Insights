@@ -79,6 +79,11 @@ change provenance solely to choose a window and omit `adaptive_start`. Verify
 `source_load_count=1` and use the returned rolling, adaptive, and disjoint
 windows without repeating them as separate calls.
 
+When the user supplies exact custom periods, include them in the same matrix as
+timezone-aware `custom_intervals` with explicit `end_inclusive` values. Verify
+`window_count=12+custom_count` and one source load; use the one frozen cutoff
+for a "to now" interval instead of issuing separate reads.
+
 Use the matrix to compare:
 
 - net and gross PnL, fees, funding, volume, win rate, expectancy, drawdown, and
@@ -95,7 +100,8 @@ execution accounting.
 
 When the user asks to review trades since settings changed:
 
-1. Read current settings with `settings.read current_bot_settings`, then
+1. Read current settings with `settings.read view=current_bot_settings` and
+   `result_view=enabled_only`, then
    complete `runtime.provenance change_causality aggregate_metrics`—through
    `analysis.start` for a long or all-history read—and call the one
    full-selection `window_matrix`.
@@ -130,6 +136,11 @@ settings-change review, and consume it completely before starting another job.
 Before starting it, name the exact unresolved claim in the working analysis.
 If the compact evidence and ledger already answer every material claim, stop
 without a reasoning expansion.
+
+Use enabled path/catalog, behavior hash, and prompt hash metadata for generation
+comparison. Do not treat disabled, unset, inherited, or UI-only values as active;
+request the complete settings view only when an exact raw value or prompt body
+can materially change the claim.
 
 For this route, call `execution.quality` only when the user explicitly asks
 about execution, fills, fees, failures, or latency, or when compact ledger
@@ -311,6 +322,11 @@ that can change the answer. Treat unavailable PnL, fees, and chronology as
 unknown, not zero, and do not relabel decision-to-fill elapsed time as pure
 exchange latency.
 
+Use prospective attempt rows to distinguish prepared, send-started,
+acknowledged, failed, retry, and outcome-unknown dispatches in Server and Client
+Mode. Keep intent audits separate, retain legacy absence as unavailable, and do
+not infer BBO, spread, or latency from nearest timestamps.
+
 Retrieve `positions.episodes` with `result_view=event_detail` for the complete
 requested window through `analysis.start` when the synchronous result may be
 large. For an explicitly comprehensive full-history audit, make one
@@ -319,8 +335,16 @@ all-history unselected `event_detail` read and reuse it for every interval.
 Select complete-chunk retrieval for this ledger: make `artifact.manifest` the
 first access to its handle. That manifest call commits the handle to complete
 mode, so never call `artifact.query` for it. Consume every advertised artifact
-chunk exactly once and reconcile event, canonical-fill, funding, linked,
+chunk exactly once in bounded batches, acknowledging consecutive `{ordinal,
+content_hash}` rows through `artifact.resume`. Resume only from its durable
+confirmed checkpoint and stop when it reports complete. Reconcile event,
+canonical-fill, funding, linked,
 ambiguous, unmatched, and manifest counts before making completeness claims.
+
+For every `artifact.read`, branch on the returned `encoding`: encode `text` as
+UTF-8 bytes when `encoding=utf-8`, or decode `base64_data` when
+`encoding=base64`. Verify raw `byte_count` and `content_hash` before
+acknowledging the chunk.
 
 Trace each material campaign without gaps:
 
@@ -350,6 +374,13 @@ exact start/end for the relevant campaign or complete cohort,
 artifact. Add only advertised exact `settings_paths` needed by the question;
 never guess or flatten a settings path. Use `content_view=verbatim` only when
 exact stored prompt, response, or full-context bytes are necessary.
+
+For model/provider reliability questions, first use `decision.context
+result_view=model_reasoning_outcome_metrics` over the complete cohort. Compare
+requested/actual primary and review lineage, fallback/retry/failure/parse/
+refusal state, review changes, final action, execution linkage, and reasoning
+availability. Keep `legacy_unknown` separate and expand exact text only for a
+compact cohort that can change the conclusion.
 
 Inspect:
 

@@ -1,6 +1,6 @@
 ---
 name: vtx-insights-analysis
-description: Analyze, optimize, manage fleet profiles and write-only connections, automate, and trade VTX with separately authorized Insights tools. Use for bot reviews, public or whole-platform comparisons, settings improvements, profile provisioning, provider/exchange connection changes, Server Mode Trader or Assistant control, explicitly requested trading operations on profiles the user owns, policy replay, stored reasoning, and VTX product questions.
+description: Analyze, optimize, manage fleet profiles and write-only connections, automate, and trade VTX with separately authorized Insights tools. Use for bot reviews, public or whole-platform comparisons, settings improvements, profile provisioning, provider/exchange connection changes, Server or Client Trader start/status, Server Mode lifecycle control, explicitly requested trading operations on profiles the user owns, policy replay, stored reasoning, and VTX product questions.
 ---
 
 # VTX Insights
@@ -23,13 +23,14 @@ Use VTX Insights as the VTX trading-data and action source. The user chooses ana
 - Use the host's native web, file, terminal, and calculation tools when they materially improve the answer.
 - Use your own judgment for tools, calculations, recommendations, and the final answer. VTX does not grade, rewrite, or verify it.
 - If targeted values suffice, call `artifact.query` directly with `path=[]` and extend only returned keys or indexes; do not call `artifact.manifest` first. For a wide object, repeat the same path with each exact `next_structure_offset` until the needed key is disclosed.
-- If that exact query must run through `analysis.start`, keep the source handle in query mode. The returned query-result artifact is a separate handle containing the complete exact response: make `artifact.manifest` its first access and read every advertised chunk exactly once. Do not call `artifact.manifest` on the source handle or `artifact.query` on the result handle.
-- Calling `artifact.manifest` commits that handle to complete retrieval: read every advertised chunk exactly once and never query that handle.
+- If that exact query must run through `analysis.start`, keep the source handle in query mode. The returned query-result artifact is a separate handle containing the complete exact response: make `artifact.manifest` its first access, read only the bounded chunk-metadata page it advertises, and acknowledge confirmed hashes through `artifact.resume` to receive each next page. Do not call `artifact.manifest` on the source handle or `artifact.query` on the result handle.
+- Calling `artifact.manifest` commits that handle to complete retrieval. Read only the returned page's advertised ordinals, acknowledge consecutive `{ordinal, content_hash}` pairs through `artifact.resume`, and repeat with each bounded metadata page it returns until complete; never query that handle. After interruption, call `artifact.resume` with an empty acknowledgement list to recover the durable checkpoint and current page without advancing it.
+- For every `artifact.read`, use `text` as UTF-8 bytes when `encoding=utf-8`, or decode `base64_data` when `encoding=base64`. Verify the raw `byte_count` and `content_hash` before acknowledging the chunk.
 - Use `help.search` and `help.open` only for VTX product behavior. Do not substitute help text for trading or market evidence.
 - Before changing settings, inspect the current configuration, identify the exact owned profile, and use a stable idempotency key for the approved change.
 - Use profile lifecycle tools for fleet provisioning. Cloning carries settings only; connect provider or exchange access separately with the connection permission.
 - Treat every provider or exchange value as write-only. Never ask Insights to read, export, recover, echo, or place the value in prose, files, screenshots, or artifacts; rely on returned configured counts and validation status.
-- Before starting or stopping Trader or Assistant automation, inspect the current persisted bot status and report the resulting state.
+- Before starting or stopping Trader or Assistant automation, inspect the current bot status and report desired and confirmed state separately. `control.bot.status` and `control.bot.start` support exact mixed Server/Client cohorts. A Client start persists desired Trader intent without assigning or transferring an owner; `waiting_for_owner` is not running. Server-only overrides are invalid for a mixed/Client start.
 - Perform a trading action only when the user's request authorizes it and only for owned profiles. Use the narrow single-profile tool for one operation and `trade.batch` for an approved heterogeneous fleet plan. Report every returned exchange and post-action state honestly; never infer success from submission alone.
 - Require the tool's explicit confirmation literal before closing every position. Use stable idempotency keys for individual actions and the complete ordered batch.
 

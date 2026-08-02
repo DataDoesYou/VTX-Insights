@@ -1,6 +1,6 @@
 {
   "name": "vtx-insights",
-  "version": "2026.8.7",
+  "version": "2026.8.8",
   "description": "Reconstruct bot trade chains, optimize, automate, and trade VTX with separately approved permissions.",
   "author": {
     "name": "DataDoesYou LLC",
@@ -13,7 +13,7 @@
   "interface": {
     "displayName": "VTX Insights",
     "shortDescription": "VTX analysis and trading automation",
-    "longDescription": "Reconstruct complete bot trade chains, analyze your bots or the public platform, optimize settings on profiles you own, control Server Mode automation, and place explicitly requested orders with separately approved permissions.",
+    "longDescription": "Reconstruct complete bot trade chains, analyze your bots or the public platform, optimize settings on profiles you own, inspect and start Server or Client Traders, control Server Mode lifecycle, and place explicitly requested orders with separately approved permissions.",
     "developerName": "DataDoesYou LLC",
     "category": "Finance",
     "capabilities": [
