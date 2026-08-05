@@ -1,7 +1,7 @@
 {
   "name": "vtx-insights",
   "displayName": "VTX Insights",
-  "version": "2026.8.8",
+  "version": "2026.8.10",
   "description": "Reconstruct bot trade chains, optimize, automate, and trade VTX with separately approved permissions.",
   "author": {
     "name": "DataDoesYou LLC"

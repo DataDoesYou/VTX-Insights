@@ -96,6 +96,43 @@ Use the matrix to compare:
 Do not call every fill a trade. A campaign is the strategy outcome; fills are
 execution accounting.
 
+### Platform Aggregate Observability Route
+
+When the question is an aggregate whole-platform asset, behavior-generation,
+source-coverage, campaign, or execution-cost question:
+
+1. Choose one explicit cutoff and call `analysis.start` directly for one
+   `positions.episodes result_view=window_matrix` request with
+   `selection={"population":"whole_platform"}`. Do not make a synchronous
+   probe, discover a ranked profile subset, or start a second position-episode
+   source job.
+2. Before parsing result data, persist the source handle, cutoff, scope,
+   custom intervals, and planned query paths in the completed-call ledger.
+3. Make `artifact.query` with `path=[]` the first artifact access. This commits
+   the handle to query mode; never call `artifact.manifest` or download the full
+   raw artifact for this aggregate question. Discover returned keys before
+   querying child paths.
+4. Retrieve only the complete compact matrix paths needed for the answer: window
+   metadata, cohort and per-profile stream coverage, per-profile asset coverage,
+   and window-local campaign metrics by profile/asset/generation. Preserve every
+   returned zero-event profile and conservation row; targeted retrieval is
+   transport selection, not analytical sampling.
+5. When execution cost is part of the question, call
+   `execution.quality result_view=summary` separately with the same explicit
+   cutoff and `selection={"population":"whole_platform"}`. This is the compact
+   execution source; it is not a child path in the position-episode matrix
+   artifact. Record and reconcile both calls without downloading execution
+   detail rows.
+6. If a targeted query itself becomes durable, keep the matrix source handle in
+   query mode and treat the query-result handle as a separate artifact. Record
+   it before parsing and follow its advertised manifest/resume contract without
+   changing the original handle's retrieval mode.
+
+Do not retrieve an all-history event ledger, raw decision reasoning, or complete
+artifact for this route unless a separate causal question genuinely requires
+exact chains. If it does, start that expansion as a separate, cutoff-identical
+request and state the unresolved claim first.
+
 ### Settings-Change Trade Review Route
 
 When the user asks to review trades since settings changed:
@@ -302,6 +339,9 @@ must be complete before each durable expansion starts, and one durable artifact
 must be fully consumed before starting the next.
 
 ## 3. Reconstruct Complete Chains
+
+The platform aggregate route also skips this generic section unless a separate
+causal question makes a ledger material.
 
 Skip this generic section for the dedicated execution-quality and guardrail
 routes above unless a separate causal question makes a ledger material. Reuse
