@@ -117,6 +117,10 @@ source-coverage, campaign, or execution-cost question:
    and window-local campaign metrics by profile/asset/generation. Preserve every
    returned zero-event profile and conservation row; targeted retrieval is
    transport selection, not analytical sampling.
+   After the paths are disclosed, use `artifact.query_many` to retrieve several
+   small indexed paths in one round trip. Keep each returned path's exact versus
+   structure projection and continuation separate. Use individual
+   `artifact.query` for legacy unindexed artifacts or durable exact retrieval.
 5. When execution cost is part of the question, call
    `execution.quality result_view=summary` separately with the same explicit
    cutoff and `selection={"population":"whole_platform"}`. This is the compact
@@ -132,6 +136,13 @@ Do not retrieve an all-history event ledger, raw decision reasoning, or complete
 artifact for this route unless a separate causal question genuinely requires
 exact chains. If it does, start that expansion as a separate, cutoff-identical
 request and state the unresolved claim first.
+
+For fleet-wide premature-close, same-candle reversal, or unchanged-evidence
+questions, use `decision.context result_view=adjacent_transition_audit` with an
+exact start and end before requesting raw reasoning. It returns the complete
+selected non-HOLD transition population with the preceding same-profile/symbol
+typed action, body-free candle-identity delta, reasoning availability, and
+cutoff-safe execution outcome.
 
 ### Settings-Change Trade Review Route
 
