@@ -65,6 +65,15 @@ Read complete change provenance first when recent configuration changes matter.
 Identify when each material change became effective and do not judge the new
 generation using earlier results.
 
+For a literal “since configuration or prompt change” review, start one
+`trade_chain.since_change` request through `analysis.start` with the exact
+selection and cutoff, then consume its one immutable body-free artifact. Use its
+exact retained boundary, effective-consumption prompt lineage, compact campaign
+economics, provider reliability, coverage, and conservation as the core
+evidence. Make separate calls below only for a named unresolved claim. If any
+selected profile lacks an exact boundary, preserve the typed missingness and do
+not infer an adaptive fallback.
+
 Call `positions.episodes` with `result_view=window_matrix` and
 `matrix_projection=compact` exactly once for the full selection and cutoff.
 Use `matrix_projection=full` only when a literal setting or input-cohort claim
