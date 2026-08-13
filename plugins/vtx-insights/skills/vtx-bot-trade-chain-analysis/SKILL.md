@@ -65,8 +65,10 @@ Read complete change provenance first when recent configuration changes matter.
 Identify when each material change became effective and do not judge the new
 generation using earlier results.
 
-Call `positions.episodes` with `result_view=window_matrix` exactly once for the
-full selection and cutoff. When recent changes define the requested cohort,
+Call `positions.episodes` with `result_view=window_matrix` and
+`matrix_projection=compact` exactly once for the full selection and cutoff.
+Use `matrix_projection=full` only when a literal setting or input-cohort claim
+requires the high-cardinality detail omitted by compact. When recent changes define the requested cohort,
 resolve each selected profile's latest relevant material change and keep
 qualifying timestamps within seven days. If exactly one qualifying timestamp
 remains, use it as `adaptive_start`; if multiple remain, use their latest
@@ -103,6 +105,7 @@ source-coverage, campaign, or execution-cost question:
 
 1. Choose one explicit cutoff and call `analysis.start` directly for one
    `positions.episodes result_view=window_matrix` request with
+   `matrix_projection=compact` and
    `selection={"population":"whole_platform"}`. Do not make a synchronous
    probe, discover a ranked profile subset, or start a second position-episode
    source job.
@@ -152,7 +155,7 @@ When the user asks to review trades since settings changed:
    `result_view=enabled_only`, then
    complete `runtime.provenance change_causality aggregate_metrics`—through
    `analysis.start` for a long or all-history read—and call the one
-   full-selection `window_matrix`.
+   full-selection `window_matrix` with `matrix_projection=compact`.
 2. Use the matrix's returned adaptive-window start as the exact `start` for
    interval-scoped `policy.evaluate summary`, `decision.context
    exposure_metrics`, `position.excursions summary`, and any compact decision
@@ -206,7 +209,8 @@ asking for settings-change attribution:
    start already supplied by the user, host, or existing thread. If no explicit
    handle was supplied, discover the intended public comparison population
    once. Never invent an investigation start from an unrelated settings change.
-2. Call the one full-selection `window_matrix` with `adaptive_start` omitted.
+2. Call the one full-selection `window_matrix` with `matrix_projection=compact`
+   and `adaptive_start` omitted.
    Do not call change provenance merely because this is a performance question.
    If no investigation start was already established, use the returned
    `standard_windows.all.complete_metrics.time_coverage.first_event_at` as the
@@ -235,7 +239,8 @@ When the user asks whether one campaign gave back gains or exited late:
 1. Resolve the exact requested profiles, campaign symbol, campaign start, and
    one cutoff from the user, host, existing thread, or retained matrix. Do not
    rediscover an exact profile selection that is already established.
-2. Complete one full-selection `window_matrix` with `adaptive_start` omitted,
+2. Complete one full-selection `window_matrix` with `matrix_projection=compact`
+   and `adaptive_start` omitted,
    then call direct `position.excursions summary` and direct
    `execution.quality summary` with `decision_target_settings=omit` for the
    exact campaign start, symbol, selection, and cutoff.
@@ -273,8 +278,9 @@ are already established:
 1. Reuse the exact supplied selection, loss symbols, investigation start, and
    cutoff. Do not call `profiles.discover`, broaden the cohort, or replace the
    established interval with a settings-change boundary.
-2. Call exactly one full-selection `window_matrix` with `adaptive_start`
-   omitted. Call direct `execution.quality summary` with
+2. Call exactly one full-selection `window_matrix` with
+   `matrix_projection=compact` and `adaptive_start` omitted. Call direct
+   `execution.quality summary` with
    `decision_target_settings=omit`, the exact selection, investigation start,
    and cutoff, but no `symbols` filter. Call direct `decision.context
    context_rows` for the exact loss symbols with `execution_linkage=executed`,
@@ -330,8 +336,9 @@ established:
 1. Reuse the exact supplied selection, established start, and cutoff. Do not
    call `profiles.discover`, Help, schema discovery, or `market.history` unless
    a separate explicit candle or market-path question makes it material.
-2. Call exactly one full-selection `window_matrix` with `adaptive_start`
-   omitted. Call direct `decision.context exposure_metrics` with
+2. Call exactly one full-selection `window_matrix` with
+   `matrix_projection=compact` and `adaptive_start` omitted. Call direct
+   `decision.context exposure_metrics` with
    `execution_linkage=all`, `content_view=audit`, `include_reasoning=false`,
    and `include_candle_coverage=false`, plus direct `policy.evaluate summary`,
    replaying the same selection, start, and cutoff on both interval calls.
