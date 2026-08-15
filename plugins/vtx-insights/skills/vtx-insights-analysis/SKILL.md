@@ -1,41 +1,41 @@
 ---
 name: vtx-insights-analysis
-description: Analyze, optimize, manage fleet profiles and write-only connections, automate, and trade VTX with separately authorized Insights tools. Use for bot reviews, public or whole-platform comparisons, settings improvements, profile provisioning, provider/exchange connection changes, Server or Client Trader start/status, Server Mode lifecycle control, explicitly requested trading operations on profiles the user owns, policy replay, stored reasoning, and VTX product questions.
+description: >-
+  Use VTX Insights for general VTX analysis and explicitly authorized operations:
+  discover profiles, compare public or owned populations, retrieve complete evidence,
+  manage settings and profiles, configure write-only connections, control bots, and
+  place requested trades. Route deep causal bot-performance reviews,
+  settings-generation comparisons, execution diagnoses, and win/loss investigations
+  to the bundled $vtx-bot-trade-chain-analysis skill.
 ---
 
 # VTX Insights
 
-Use VTX Insights as the VTX trading-data and action source. The user chooses analysis, settings, profile-management, write-only connection, automation-control, and trading permissions separately.
+Use VTX Insights as the VTX data and action source. Treat this skill as the general router and safety contract; do not recreate the specialist trade-chain workflow here.
 
-- Resolve the requested population explicitly: the user's profiles, named public handles or wallets, or the whole public VTX platform.
-- Inspect returned coverage, provenance, as-of times, and warnings before making completeness claims. Choose an artifact retrieval mode before calling an artifact tool.
-- For a large population, a potentially long computation, or any synchronous response timeout, call `analysis.start` with the intended read capability and its unchanged arguments. Poll `analysis.status` until it returns the immutable artifact, then inspect that artifact. Do not narrow or sample the user's request merely to fit one request window.
-- For a deep bot performance diagnosis, use the bundled `$vtx-bot-trade-chain-analysis` skill. It reconstructs settings generations, decisions, executions, fills, positions, exits, fees, funding, PnL, and market context instead of diagnosing from aggregate PnL. Its value-first workflow never caps a requested population and does not retrieve unrelated HOLD decisions when they cannot change the answer.
-- For a complete reasoning audit, call broad raw `decision.context` with exact `start`/`end`, `execution_linkage=all`, `result_view=context_rows`, `content_view=audit`, and `include_reasoning=true`, then consume every artifact chunk. This retains unexecuted HOLDs, exact final reasoning, and retained Primary/Review Reasoning Traces without generated episode or decision IDs or raw prompt/model-response bytes. Use only advertised exact `settings_paths` needed by the question, and never guess or flatten a path. Use `content_view=verbatim` only when exact raw prompt, model-response, or full-context bytes are required.
-- For max-exposure or retained trading-limit questions over large decision populations, use `decision.context` with `result_view=exposure_metrics`; use `context_rows` when individual decision context is required.
-- Preserve directly retained, same-decision request-local repaired, recomputed counterfactual, and unavailable evidence as distinct states. Repair never imports current settings or writes history. Never describe a replay as a live result.
-- For execution, fill, fee, failure, or timing questions, start with `execution.quality result_view=summary` and `decision_target_settings=omit`. Use complete `detail_rows` through `analysis.start` only when row-level evidence is material. Unknown economics or chronology are not zero, and decision-to-fill time is not pure exchange latency.
-- For guardrail questions, start with `policy.evaluate result_view=summary`; use complete `decision_rows` through `analysis.start` when a per-decision enforcement claim is material. Prompt restrictions, observed deterministic blocks, observed repair, unavailable evidence, and counterfactual replay remain distinct.
-- For a general settings-change trade review, make one synchronous `decision.context exposure_metrics` attempt with `execution_linkage=all`; if it times out before returning an artifact, recover that same exact request once through `analysis.start`. Treat `policy.evaluate summary` as complete unless the literal question requests a per-decision enforcement audit, and make at most one optional post-ledger `decision.context context_rows` expansion. Do not repeat a completed exposure request or expand merely because a summary contains nonzero or unavailable evidence.
-- For a campaign-loss/systemic-problem question without change attribution, reuse the exact investigation start already supplied by the user, host, or thread; never derive it from an unrelated settings change. Call the full-selection `window_matrix` with `adaptive_start` omitted. If no start was established, use its returned `standard_windows.all.complete_metrics.time_coverage.first_event_at`; if that is null, report no retained campaign instead of calling excursions. Complete direct `execution.quality summary` and `position.excursions summary` at the exact start before the all-history ledger and complete all-linkage reasoning. This execution summary distinguishes execution failure from strategy failure even when fills were not named.
-- In a same-thread Max Drawdown follow-up, an explicit warning/critical pair triggers one comparison replay with `enforcement=hard` using the already established six-hour window, selection, start, and cutoff even when the pair matches current settings. Never infer the pair from settings or replay a policy/window-only question.
-- For Max Drawdown, inspect every selected profile, its trusted current wallet-assignment history counts, and any pre-window divergence. For excursions, start with `result_view=summary`, keep population completeness separate from exact-economics completeness, and preserve actual-position-path versus closing-event bases. A claim that gains were surrendered must use only `actual_position_path.confirmed_profit_giveback_usd`; legacy `giveback_from_mfe` also includes never-profitable losses that merely worsened. Retrieve complete `episode_rows` through `analysis.start` only when campaign rows are material.
-- Use the host's native web, file, terminal, and calculation tools when they materially improve the answer.
-- Use your own judgment for tools, calculations, recommendations, and the final answer. VTX does not grade, rewrite, or verify it.
-- If targeted values suffice, call `artifact.query` directly with `path=[]` and extend only returned keys or indexes; do not call `artifact.manifest` first. For a wide object, repeat the same path with each exact `next_structure_offset` until the needed key is disclosed.
-- After path discovery, use `artifact.query_many` for several small indexed descendant paths in one MCP round trip. It is bounded and direct-only; use individual `artifact.query` for legacy unindexed artifacts or when one value needs durable exact retrieval.
-- For premature-close, same-candle reversal, or unchanged-evidence analysis, prefer `decision.context result_view=adjacent_transition_audit` over a fleet-wide reasoning-body download. Expand exact reasoning only for transitions that remain material and unresolved.
-- If that exact query must run through `analysis.start`, keep the source handle in query mode. The returned query-result artifact is a separate handle containing the complete exact response: make `artifact.manifest` its first access, read only the bounded chunk-metadata page it advertises, and acknowledge confirmed hashes through `artifact.resume` to receive each next page. Do not call `artifact.manifest` on the source handle or `artifact.query` on the result handle.
-- Calling `artifact.manifest` commits that handle to complete retrieval. Read only the returned page's advertised ordinals, acknowledge consecutive `{ordinal, content_hash}` pairs through `artifact.resume`, and repeat with each bounded metadata page it returns until complete; never query that handle. After interruption, call `artifact.resume` with an empty acknowledgement list to recover the durable checkpoint and current page without advancing it.
-- For every `artifact.read`, use `text` as UTF-8 bytes when `encoding=utf-8`, or decode `base64_data` when `encoding=base64`. Verify the raw `byte_count` and `content_hash` before acknowledging the chunk.
-- Use `help.search` and `help.open` only for VTX product behavior. Do not substitute help text for trading or market evidence.
-- Before changing settings, inspect the current configuration, identify the exact owned profile, and use a stable idempotency key for the approved change.
-- Use profile lifecycle tools for fleet provisioning. Cloning carries settings only; connect provider or exchange access separately with the connection permission.
-- Treat every provider or exchange value as write-only. Never ask Insights to read, export, recover, echo, or place the value in prose, files, screenshots, or artifacts; rely on returned configured counts and validation status.
-- Before starting or stopping Trader or Assistant automation, inspect the current bot status and report desired and confirmed state separately. `control.bot.status` and `control.bot.start` support exact mixed Server/Client cohorts. A Client start persists desired Trader intent without assigning or transferring an owner; `waiting_for_owner` is not running. Server-only overrides are invalid for a mixed/Client start.
-- Perform a trading action only when the user's request authorizes it and only for owned profiles. Use the narrow single-profile tool for one operation and `trade.batch` for an approved heterogeneous fleet plan. Report every returned exchange and post-action state honestly; never infer success from submission alone.
-- Require the tool's explicit confirmation literal before closing every position. Use stable idempotency keys for individual actions and the complete ordered batch.
+## Route The Request
 
-Public VTX trading data is available for analysis. Billing and account-security management remain in VTX.
+- Use `$vtx-bot-trade-chain-analysis` for questions about why bots win or lose, whether a problem is systemic, how settings generations changed outcomes, execution quality, overtrading, exits, or evidence-backed bot improvements.
+- Use the live capability registry for ordinary VTX questions, public or owned-profile comparisons, settings and profile work, connection management, bot control, and explicitly requested trading actions. Do not guess capability names or input fields.
+- Resolve the requested population explicitly: owned profiles, exact public handles or wallets, or the whole public platform. Preserve one explicit time window and cutoff across related reads.
+- Use `help.search` and `help.open` only for VTX product behavior. Do not substitute Help for trading evidence.
 
-For setup, grant management, troubleshooting, and the current host compatibility matrix, open https://vtxmacro.com/insights.
+## Preserve Complete Evidence
+
+- Inspect coverage, provenance, freshness, warnings, and unavailable fields before making claims. Unknown is not zero, and replay is not observed performance.
+- For large or slow reads, call `analysis.start` with the original capability and unchanged arguments, poll `analysis.status`, and consume its immutable artifact. Never shrink or sample the requested population to fit one response window.
+- Choose one artifact mode. For targeted values, begin with `artifact.query path=[]`, discover exact paths, and use `artifact.query_many` for several small indexed descendants. For complete retrieval, begin with `artifact.manifest`, read every advertised chunk, and acknowledge consecutive hashes through `artifact.resume`. Never mix query and complete modes on one handle.
+- For every `artifact.read`, use `text` as UTF-8 bytes when `encoding=utf-8`, or decode `base64_data` when `encoding=base64`; verify `byte_count` and `content_hash` before acknowledgement.
+- When exact retained reasoning is material, use `decision.context` with exact start and end, `execution_linkage=all`, `result_view=context_rows`, `content_view=audit`, and `include_reasoning=true`. Request only advertised exact `settings_paths`; never guess or flatten a path. Use `content_view=verbatim` only for exact raw prompt, model-response, or full-context bytes.
+
+## Authorize And Verify Actions
+
+- Request analysis, settings, bot-control, profile-management, connection-management, and trading permissions separately. Actions are limited to profiles the user owns.
+- Before a consequential action, resolve the exact profile and current state, preview when supported, explain the effect, obtain the required approval, and use a stable idempotency key. Verify the receipt against effective readback or observed runtime/exchange state.
+- Treat provider and exchange credentials as write-only. Never request, recover, echo, log, or place them in prose, files, screenshots, or artifacts.
+- Report desired and confirmed bot state separately. A Client Mode start may remain `waiting_for_owner`; it is not running until current ownership and heartbeat evidence confirm it.
+- Trade only when the user explicitly requests it. Use the narrow single-profile capability for one action and `trade.batch` for an approved heterogeneous fleet plan. Require the capability's exact confirmation literal for closing every position, and report each exchange result without inferring success from submission.
+
+Use your own judgment for tools, calculations, recommendations, and the final answer. VTX does not grade or rewrite model conclusions. Billing and account-security management remain in VTX.
+
+For setup, permission management, host compatibility, and the current capability registry, open https://vtxmacro.com/insights.
