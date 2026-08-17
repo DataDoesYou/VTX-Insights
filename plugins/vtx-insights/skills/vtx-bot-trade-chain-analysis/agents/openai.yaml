@@ -1,7 +1,7 @@
 interface:
   display_name: "VTX Bot Trade-Chain Analysis"
   short_description: "Explain bot wins and losses from complete evidence"
-  default_prompt: "Use $vtx-bot-trade-chain-analysis to analyze why my bots are winning or losing and recommend the smallest evidence-backed improvements."
+  default_prompt: "Use $vtx-bot-trade-chain-analysis to explain my bot results and recommend evidence-backed improvements."
 dependencies:
   tools:
     - type: "mcp"

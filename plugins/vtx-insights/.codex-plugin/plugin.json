@@ -1,6 +1,6 @@
 {
   "name": "vtx-insights",
-  "version": "2026.8.18",
+  "version": "2026.8.19",
   "description": "Reconstruct bot trade chains, optimize, automate, and trade VTX with separately approved permissions.",
   "author": {
     "name": "DataDoesYou LLC",
@@ -29,7 +29,9 @@
     "brandColor": "#10B981",
     "composerIcon": "./assets/vtx-insights.png",
     "logo": "./assets/vtx-insights.png",
-    "defaultPrompt": "Use the bundled VTX trade-chain analysis skill to explain why my bots are winning or losing, recommend the smallest evidence-backed improvements, and ask before applying them."
+    "defaultPrompt": [
+      "Analyze why my VTX bots win or lose and recommend the smallest evidence-backed improvements."
+    ]
   },
   "mcpServers": "./.mcp.json"
 }
