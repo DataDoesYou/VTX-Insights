@@ -519,7 +519,7 @@ economics separate. Keep population completeness separate from exact-economics
 completeness; quarantined or non-exact fills remain enumerable even when
 excluded from exact campaign economics.
 
-Use Codex web research only as supplemental outside evidence. Use
+Use your agent's native web research only as supplemental outside evidence. Use
 `decision.context`, `market.news`, and `market.calendar` for the exact
 VTX-managed context the bot received.
 

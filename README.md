@@ -1,13 +1,15 @@
 # VTX Insights
 
-VTX Insights connects Codex, Claude Code, Cursor, supported GitHub Copilot surfaces, and Google Antigravity to VTX analysis, bot optimization, fleet profile management, write-only provider/exchange connections, Trader and Assistant controls, and complete trading operations on profiles the user owns.
+VTX Insights connects Codex, Claude Code, OpenClaw, Hermes Agent, Cursor, supported GitHub Copilot surfaces, and Google Antigravity to VTX analysis, bot optimization, fleet profile management, write-only provider/exchange connections, Trader and Assistant controls, and complete trading operations on profiles the user owns.
 
 Long analyses use durable `analysis.start` and `analysis.status` tools, then return a complete immutable artifact. Complete retrieval acknowledges exact chunk hashes through `artifact.resume`, so an interrupted host can continue from its durable checkpoint. A host response timeout never requires silently sampling or narrowing the requested VTX population.
 
 Artifact chunks are lossless: read `text` as UTF-8 bytes when `encoding=utf-8`, or decode `base64_data` when `encoding=base64`, then verify the raw `byte_count` and `content_hash` before acknowledging the chunk.
 
-The connector installs two skills with the MCP server. `vtx-insights-analysis`
-covers the complete VTX analysis and action surface.
+The packaged Codex, Claude Code, and Cursor plugins install two skills with the
+MCP server. OpenClaw and Hermes install the same public skills separately with
+the commands below. `vtx-insights-analysis` covers the complete VTX analysis and
+action surface.
 `vtx-bot-trade-chain-analysis` is the flagship deep-analysis workflow: it
 reconstructs settings generations, decisions, executions, fills, position
 changes, exits, fees, funding, PnL, and market context before recommending a
@@ -38,7 +40,7 @@ Start another new session and reauthenticate if prompted. Codex desktop users
 can disable the plugin from Settings > Plugins. The manual MCP fallback is in
 `manual/codex.config.toml`.
 
-After updating, confirm the installed manifest reports only `2026.8.19` before
+After updating, confirm the installed manifest reports only `2026.8.20` before
 starting the new session.
 
 ## Claude Code
@@ -53,9 +55,53 @@ The one-time version-format migration sorts below the retired packed-date
 version, so an ordinary Claude update can leave the old package installed. Run
 `claude plugin marketplace update vtx-insights`, then
 `claude plugin uninstall vtx-insights@vtx-insights`, then
-`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.8.19`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
+`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.8.20`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
 `vtx-insights@vtx-insights` for later lifecycle changes. The manual fallback is
 in `manual/claude.mcp.json`.
+
+## OpenClaw
+
+OpenClaw's published CLI can connect to the remote VTX MCP server with OAuth:
+
+```bash
+openclaw mcp add vtx-insights --url https://api.vtxmacro.com/insights/mcp --transport streamable-http --auth oauth --oauth-scope 'insights:read insights:settings insights:control insights:trade insights:profiles insights:credentials' --timeout 120
+openclaw mcp login vtx-insights
+openclaw mcp login vtx-insights --code YOUR_AUTHORIZATION_CODE
+openclaw mcp doctor vtx-insights --probe
+```
+
+Open the URL printed by the first login command, approve the requested VTX
+permissions, then replace `YOUR_AUTHORIZATION_CODE` with the returned code.
+
+The equivalent checked configuration is in `manual/openclaw.config.json`. To
+install the VTX workflows, clone this repository and run `openclaw skills
+install <skill-directory> --global` for both directories under
+`plugins/vtx-insights/skills/`.
+
+## Hermes Agent
+
+Hermes Agent 0.20.4 or newer can connect to VTX through its native remote MCP
+and OAuth support when installed through Hermes' supported official installer,
+Desktop app, or Docker image. The separately published PyPI package is an
+unsupported distribution and does not provide this safety contract.
+
+```bash
+hermes mcp add vtx-insights --url https://api.vtxmacro.com/insights/mcp --auth oauth --connect-timeout 315
+hermes config set mcp_servers.vtx-insights.trust untrusted
+hermes mcp test vtx-insights
+```
+
+The equivalent `mcp_servers` configuration is in `manual/hermes.config.json`.
+The `untrusted` tier keeps Hermes' local approval gate in front of VTX tools
+that can change settings, control bots, manage profiles or connections, or
+trade.
+Hermes can install either public
+`SKILL.md` directly with `hermes skills install <raw-skill-url>`.
+
+OpenClaw and Hermes support the Insights analysis/action surface independently
+of VTX trading inference. Their current machine result contracts do not meet
+VTX's durable inference receipt and interruption requirements; use the
+foreground `agent-connect` path if either harness supplies trading decisions.
 
 ## Cursor
 

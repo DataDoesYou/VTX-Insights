@@ -1,0 +1,16 @@
+{
+  "mcp": {
+    "servers": {
+      "vtx-insights": {
+        "url": "https://api.vtxmacro.com/insights/mcp",
+        "transport": "streamable-http",
+        "requestTimeoutMs": 120000,
+        "connectionTimeoutMs": 5000,
+        "auth": "oauth",
+        "oauth": {
+          "scope": "insights:read insights:settings insights:control insights:trade insights:profiles insights:credentials"
+        }
+      }
+    }
+  }
+}

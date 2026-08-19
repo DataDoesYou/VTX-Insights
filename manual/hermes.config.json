@@ -1,0 +1,15 @@
+{
+  "mcp_servers": {
+    "vtx-insights": {
+      "url": "https://api.vtxmacro.com/insights/mcp",
+      "enabled": true,
+      "timeout": 120,
+      "connect_timeout": 315,
+      "auth": "oauth",
+      "trust": "untrusted",
+      "oauth": {
+        "scope": "insights:read insights:settings insights:control insights:trade insights:profiles insights:credentials"
+      }
+    }
+  }
+}
