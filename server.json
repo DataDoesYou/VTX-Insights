@@ -3,7 +3,7 @@
   "name": "io.github.DataDoesYou/vtx-insights",
   "title": "VTX Insights",
   "description": "VTX trading analysis, fleet profiles, write-only connections, automation controls, and orders on profiles the user owns.",
-  "version": "2026.8.20",
+  "version": "2026.8.21",
   "websiteUrl": "https://vtxmacro.com/insights",
   "repository": {
     "url": "https://github.com/DataDoesYou/VTX-Insights",

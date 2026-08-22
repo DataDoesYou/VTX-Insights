@@ -453,7 +453,7 @@ Inspect:
 
 - decision-time effective settings and dynamically defined variables;
 - final reasoning and available Primary/Review reasoning;
-- position, account, and market state available at that moment;
+- position, account, and market context available at that moment;
 - linked execution, block, fill, or absence of execution; and
 - whether repeated evidence, thesis drift, review behavior, or stale context
   affected the chain.
