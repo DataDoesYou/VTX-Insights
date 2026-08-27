@@ -1,0 +1,14 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "vtx-insights": {
+      "type": "remote",
+      "url": "https://api.vtxmacro.com/insights/mcp",
+      "enabled": true,
+      "oauth": {
+        "scope": "insights:read insights:settings insights:control insights:trade insights:profiles insights:credentials"
+      },
+      "timeout": 120000
+    }
+  }
+}

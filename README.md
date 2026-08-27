@@ -1,14 +1,14 @@
 # VTX Insights
 
-VTX Insights connects Codex, Claude Code, OpenClaw, Hermes Agent, Cursor, supported GitHub Copilot surfaces, and Google Antigravity to VTX analysis, bot optimization, fleet profile management, write-only provider/exchange connections, Trader and Assistant controls, and complete trading operations on profiles the user owns.
+VTX Insights connects Codex, Claude Code, OpenCode, OpenClaw, Hermes Agent, Cursor, supported GitHub Copilot surfaces, and Google Antigravity to VTX analysis, bot optimization, fleet profile management, write-only provider/exchange connections, Trader and Assistant controls, and complete trading operations on profiles the user owns.
 
 Long analyses use durable `analysis.start` and `analysis.status` tools, then return a complete immutable artifact. Complete retrieval acknowledges exact chunk hashes through `artifact.resume`, so an interrupted host can continue from its durable checkpoint. A host response timeout never requires silently sampling or narrowing the requested VTX population.
 
 Artifact chunks are lossless: read `text` as UTF-8 bytes when `encoding=utf-8`, or decode `base64_data` when `encoding=base64`, then verify the raw `byte_count` and `content_hash` before acknowledging the chunk.
 
 The packaged Codex, Claude Code, and Cursor plugins install two skills with the
-MCP server. OpenClaw and Hermes install the same public skills separately with
-the commands below. `vtx-insights-analysis` covers the complete VTX analysis and
+MCP server. OpenCode, OpenClaw, and Hermes install the same public skills
+separately with the steps below. `vtx-insights-analysis` covers the complete VTX analysis and
 action surface.
 `vtx-bot-trade-chain-analysis` is the flagship deep-analysis workflow: it
 reconstructs settings generations, decisions, executions, fills, position
@@ -40,7 +40,7 @@ Start another new session and reauthenticate if prompted. Codex desktop users
 can disable the plugin from Settings > Plugins. The manual MCP fallback is in
 `manual/codex.config.toml`.
 
-After updating, confirm the installed manifest reports only `2026.8.21` before
+After updating, confirm the installed manifest reports only `2026.8.22` before
 starting the new session.
 
 ## Claude Code
@@ -55,9 +55,29 @@ The one-time version-format migration sorts below the retired packed-date
 version, so an ordinary Claude update can leave the old package installed. Run
 `claude plugin marketplace update vtx-insights`, then
 `claude plugin uninstall vtx-insights@vtx-insights`, then
-`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.8.21`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
+`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.8.22`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
 `vtx-insights@vtx-insights` for later lifecycle changes. The manual fallback is
 in `manual/claude.mcp.json`.
+
+## OpenCode
+
+Save `manual/opencode.json` as `opencode.json` in the project where you use
+OpenCode, or merge its `vtx-insights` entry into your global OpenCode config.
+Then authenticate and confirm the connection:
+
+```bash
+opencode mcp auth vtx-insights
+opencode mcp list
+```
+
+OpenCode completes VTX OAuth in the browser. Approve only the permissions this
+OpenCode session needs. If the connection fails, run `opencode mcp debug
+vtx-insights`; remove its stored grant with `opencode mcp logout vtx-insights`.
+
+OpenCode discovers native Agent Skills under
+`~/.config/opencode/skills/<skill-name>/SKILL.md`. Clone this repository and copy
+both directories under `plugins/vtx-insights/skills/` into that global skills
+directory, preserving each skill directory name.
 
 ## OpenClaw
 
@@ -98,10 +118,11 @@ trade.
 Hermes can install either public
 `SKILL.md` directly with `hermes skills install <raw-skill-url>`.
 
-OpenClaw and Hermes support the Insights analysis/action surface independently
-of VTX trading inference. Their current machine result contracts do not meet
-VTX's durable inference receipt and interruption requirements; use the
-foreground `agent-connect` path if either harness supplies trading decisions.
+OpenCode, OpenClaw, and Hermes support the Insights analysis/action surface
+independently of VTX trading inference. Their current machine result contracts
+do not meet VTX's durable inference receipt and interruption requirements; use
+the foreground `agent-connect` path if one of these harnesses supplies Provider
+decisions or runs a Main Agent assignment. The harness loop must remain open.
 
 ## Cursor
 
