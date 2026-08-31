@@ -8,7 +8,7 @@
         "connectionTimeoutMs": 5000,
         "auth": "oauth",
         "oauth": {
-          "scope": "insights:read insights:settings insights:control insights:trade insights:profiles insights:credentials"
+          "scope": "insights:read"
         }
       }
     }

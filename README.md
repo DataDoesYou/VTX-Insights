@@ -24,11 +24,20 @@ Analyze the signed-in user's bots, named public VTX profiles or wallets, or the 
 ```bash
 codex plugin marketplace add DataDoesYou/VTX-Insights
 codex plugin add vtx-insights@vtx-insights
-codex mcp login vtx-insights --scopes insights:read,insights:settings,insights:control,insights:trade,insights:profiles,insights:credentials
+codex mcp login vtx-insights --scopes insights:read
 ```
 
-Start a new Codex session after installation so the bundled skills and tools are
-discovered. To update an existing cached installation:
+Authentication begins in the MCP client, not on the VTX Insights website. In
+ChatGPT desktop, open **Settings > MCP servers**, select VTX Insights, and choose
+**Authenticate**. In Codex CLI or the IDE, use the command above. Codex 0.146.0
+has a known OAuth issuer-validation regression; upgrade it if login reports
+`Authorization server response missing required issuer`.
+
+Start a new Codex session after installation so initialization and tool
+discovery run. In ChatGPT desktop, type `/mcp` and confirm VTX Insights is
+active. Confirm expected read tools such as `analysis.start` and
+`positions.episodes` are available; an OAuth grant alone is not operational
+verification. To update an existing cached installation:
 
 ```bash
 codex plugin marketplace upgrade vtx-insights
@@ -40,7 +49,7 @@ Start another new session and reauthenticate if prompted. Codex desktop users
 can disable the plugin from Settings > Plugins. The manual MCP fallback is in
 `manual/codex.config.toml`.
 
-After updating, confirm the installed manifest reports only `2026.8.22` before
+After updating, confirm the installed manifest reports only `2026.8.23` before
 starting the new session.
 
 ## Claude Code
@@ -55,7 +64,7 @@ The one-time version-format migration sorts below the retired packed-date
 version, so an ordinary Claude update can leave the old package installed. Run
 `claude plugin marketplace update vtx-insights`, then
 `claude plugin uninstall vtx-insights@vtx-insights`, then
-`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.8.22`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
+`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.8.23`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
 `vtx-insights@vtx-insights` for later lifecycle changes. The manual fallback is
 in `manual/claude.mcp.json`.
 
@@ -84,7 +93,7 @@ directory, preserving each skill directory name.
 OpenClaw's published CLI can connect to the remote VTX MCP server with OAuth:
 
 ```bash
-openclaw mcp add vtx-insights --url https://api.vtxmacro.com/insights/mcp --transport streamable-http --auth oauth --oauth-scope 'insights:read insights:settings insights:control insights:trade insights:profiles insights:credentials' --timeout 120
+openclaw mcp add vtx-insights --url https://api.vtxmacro.com/insights/mcp --transport streamable-http --auth oauth --oauth-scope 'insights:read' --timeout 120
 openclaw mcp login vtx-insights
 openclaw mcp login vtx-insights --code YOUR_AUTHORIZATION_CODE
 openclaw mcp doctor vtx-insights --probe
