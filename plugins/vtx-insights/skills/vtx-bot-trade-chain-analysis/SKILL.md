@@ -133,15 +133,21 @@ source-coverage, campaign, or execution-cost question:
    custom intervals, and planned query paths in the completed-call ledger.
 3. Make `artifact.query` with `path=[]` the first artifact access. This commits
    the handle to query mode; never call `artifact.manifest` or download the full
-   raw artifact for this aggregate question. Discover returned keys before
-   querying child paths.
+   raw artifact for this aggregate question. Recursively query every needed
+   disclosed object path, following `next_structure_offset`, then query a
+   disclosed list parent for `available_index_range` before batching exact
+   child paths. This discovery is stateless; earlier queries do not create
+   index entries.
 4. Retrieve only the complete compact matrix paths needed for the answer: window
    metadata, cohort and per-profile stream coverage, per-profile asset coverage,
    and window-local campaign metrics by profile/asset/generation. Preserve every
    returned zero-event profile and conservation row; targeted retrieval is
    transport selection, not analytical sampling.
    After the paths are disclosed, use `artifact.query_many` to retrieve several
-   small indexed paths in one round trip. Keep each returned path's exact versus
+   small indexed paths in one round trip or to stream typed predicates over one
+   exact indexed list/object. A large predicate scan still examines every
+   member of that parent, so submit the unchanged batch through `analysis.start`
+   if it exceeds the response window. Keep each returned path's exact versus
    structure projection and continuation separate. Use individual
    `artifact.query` for legacy unindexed artifacts or durable exact retrieval.
 5. When execution cost is part of the question, call

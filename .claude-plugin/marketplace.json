@@ -4,14 +4,14 @@
     "name": "DataDoesYou LLC"
   },
   "description": "VTX trade-chain analysis, bot optimization, automation, and trading plugins.",
-  "version": "2026.9.2",
+  "version": "2026.9.3",
   "plugins": [
     {
       "name": "vtx-insights",
       "displayName": "VTX Insights",
       "source": "./plugins/vtx-insights",
       "description": "Reconstruct bot trade chains, optimize, automate, and trade VTX with separately approved permissions.",
-      "version": "2026.9.2",
+      "version": "2026.9.3",
       "author": {
         "name": "DataDoesYou LLC"
       },
