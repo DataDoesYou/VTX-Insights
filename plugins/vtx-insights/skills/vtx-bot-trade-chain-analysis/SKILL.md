@@ -64,6 +64,11 @@ or any other Help/schema-discovery surface before starting that route.
 Replay the exact selection and cutoff on every independent profile-scoped call.
 Do not assume `scope=profile` selects a named profile.
 
+Every `positions.episodes` `window_matrix` or `event_detail` request is a
+deterministic known-large read. Start it directly through `analysis.start`
+with no synchronous probe, then consume its immutable artifact. References
+below to calling, completing, or consuming those views inherit this rule.
+
 ## 2. Establish Performance And Generations
 
 Read complete change provenance first when recent configuration changes matter.
@@ -79,8 +84,9 @@ evidence. Make separate calls below only for a named unresolved claim. If any
 selected profile lacks an exact boundary, preserve the typed missingness and do
 not infer an adaptive fallback.
 
-Call `positions.episodes` with `result_view=window_matrix` and
-`matrix_projection=compact` exactly once for the full selection and cutoff.
+Start `positions.episodes` with `result_view=window_matrix` and
+`matrix_projection=compact` exactly once through `analysis.start` for the full
+selection and cutoff.
 Use `matrix_projection=full` only when a literal setting or input-cohort claim
 requires the high-cardinality detail omitted by compact. When recent changes define the requested cohort,
 resolve each selected profile's latest relevant material change and keep
@@ -400,9 +406,9 @@ Mode. Keep intent audits separate, retain legacy absence as unavailable, and do
 not infer BBO, spread, or latency from nearest timestamps.
 
 Retrieve `positions.episodes` with `result_view=event_detail` for the complete
-requested window through `analysis.start` when the synchronous result may be
-large. For an explicitly comprehensive full-history audit, make one
-all-history unselected `event_detail` read and reuse it for every interval.
+requested window through `analysis.start` without a synchronous probe. For an
+explicitly comprehensive full-history audit, start one all-history unselected
+`event_detail` request through `analysis.start` and reuse it for every interval.
 
 Select complete-chunk retrieval for this ledger: make `artifact.manifest` the
 first access to its handle. That manifest call commits the handle to complete
