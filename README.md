@@ -19,6 +19,12 @@ Remote server: `https://api.vtxmacro.com/insights/mcp`
 
 Analyze the signed-in user's bots, named public VTX profiles or wallets, or the whole public platform. Settings, profile, connection, automation, and trading actions work only for profiles the user owns and require separately approved permissions. Bot status and Start cover exact Server/Client cohorts; a Client start saves desired Trader intent without taking over an owner and remains waiting until eligible live ownership is confirmed. Connection values are write-only and cannot be read back through Insights. Trading includes market, limit, trigger, and scale orders; order and TWAP cancellation; leverage changes; one-position or confirmed all-position closes; and resumable heterogeneous fleet batches.
 
+OAuth identifies the signed-in account but does not classify a supplied profile
+handle or wallet. For named-profile work, call `profiles.discover` once, confirm
+each `owned_by_caller` label, and use the matching exact owned or public
+selection. VTX rejects an unresolved exact selector before starting a durable
+analysis instead of silently analyzing a smaller population.
+
 ## Codex
 
 ```bash
@@ -49,7 +55,7 @@ Start another new session and reauthenticate if prompted. Codex desktop users
 can disable the plugin from Settings > Plugins. The manual MCP fallback is in
 `manual/codex.config.toml`.
 
-After updating, confirm the installed manifest reports only `2026.8.23` before
+After updating, confirm the installed manifest reports only `2026.9.1` before
 starting the new session.
 
 ## Claude Code
@@ -64,7 +70,7 @@ The one-time version-format migration sorts below the retired packed-date
 version, so an ordinary Claude update can leave the old package installed. Run
 `claude plugin marketplace update vtx-insights`, then
 `claude plugin uninstall vtx-insights@vtx-insights`, then
-`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.8.23`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
+`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.9.1`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
 `vtx-insights@vtx-insights` for later lifecycle changes. The manual fallback is
 in `manual/claude.mcp.json`.
 

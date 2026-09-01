@@ -50,11 +50,16 @@ Confirm or infer from the request:
   must define a new configuration generation; and
 - the decision the user is trying to make.
 
-Exact supplied handles are already a resolved selection. Pass them directly in
-`selection`. When a route in this skill fully specifies the needed calls, do
-not call `profiles.discover`, `help.search`, `list_mcp_resources`,
-`read_mcp_resource`, a capability catalog, or any other Help/schema-discovery
-surface before starting that route.
+Exact supplied handles identify the requested population but do not establish
+whether the caller owns them. Before the first named-profile analytical call,
+call `profiles.discover` exactly once, match every requested selector to its
+`owned_by_caller` label, and pass the handles or wallets through the matching
+exact `owned_profiles` or `public_profiles` selection. If any selector remains
+unresolved, stop and report it instead of shrinking the population. Reuse that
+resolved selection for the rest of the unchanged request and do not rediscover
+it. When a route in this skill fully specifies the needed calls, do not call
+`help.search`, `list_mcp_resources`, `read_mcp_resource`, a capability catalog,
+or any other Help/schema-discovery surface before starting that route.
 
 Replay the exact selection and cutoff on every independent profile-scoped call.
 Do not assume `scope=profile` selects a named profile.

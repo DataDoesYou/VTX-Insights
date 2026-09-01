@@ -18,6 +18,7 @@ Use VTX Insights as the VTX data and action source. Treat this skill as the gene
 - Use `$vtx-bot-trade-chain-analysis` for questions about why bots win or lose, whether a problem is systemic, how settings generations changed outcomes, execution quality, overtrading, exits, or evidence-backed bot improvements.
 - Use the live capability registry for ordinary VTX questions, public or owned-profile comparisons, settings and profile work, connection management, bot control, and explicitly requested trading actions. Do not guess capability names or input fields.
 - Resolve the requested population explicitly: owned profiles, exact public handles or wallets, or the whole public platform. Preserve one explicit time window and cutoff across related reads.
+- Authentication identifies the caller's VTX account, not whether a supplied handle or wallet is owned or public. Before the first named-profile call, call `profiles.discover` exactly once, match every requested selector to its `owned_by_caller` label, and use `owned_profiles` or `public_profiles` accordingly. If any selector remains unresolved, stop and report it instead of shrinking the population. Reuse the resolved selection for the rest of the unchanged request; do not rediscover it.
 - Use `help.search` and `help.open` only for VTX product behavior. Do not substitute Help for trading evidence.
 
 ## Preserve Complete Evidence
