@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
-  "package_version": "2026.9.3",
-  "content_fingerprint": "3d2357202ce7519e7015df629f0c29a3670f89409a8994430443d0c8db8a5323",
+  "package_version": "2026.9.4",
+  "content_fingerprint": "9c50fa33bac7e8662bf91ac7369a3c6652e13225ccbbb5744a051b4c347526c9",
   "server_contract": {
     "minimum": 1,
     "maximum": 1
@@ -11,5 +11,6 @@
     "2026-07-28",
     "2025-11-25"
   ],
-  "mcp_protocol_version": "2026-07-28"
+  "mcp_protocol_version": "2026-07-28",
+  "verification_scope": "This metadata describes Insights MCP connector compatibility and listing status. It does not certify Provider-mode or Main Agent inference acceptance, or current service health."
 }

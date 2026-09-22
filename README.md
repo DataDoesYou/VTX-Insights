@@ -25,6 +25,8 @@ each `owned_by_caller` label, and use the matching exact owned or public
 selection. VTX rejects an unresolved exact selector before starting a durable
 analysis instead of silently analyzing a smaller population.
 
+This metadata describes Insights MCP connector compatibility and listing status. It does not certify Provider-mode or Main Agent inference acceptance, or current service health.
+
 ## Codex
 
 ```bash
@@ -55,7 +57,7 @@ Start another new session and reauthenticate if prompted. Codex desktop users
 can disable the plugin from Settings > Plugins. The manual MCP fallback is in
 `manual/codex.config.toml`.
 
-After updating, confirm the installed manifest reports only `2026.9.3` before
+After updating, confirm the installed manifest reports only `2026.9.4` before
 starting the new session.
 
 ## Claude Code
@@ -70,7 +72,7 @@ The one-time version-format migration sorts below the retired packed-date
 version, so an ordinary Claude update can leave the old package installed. Run
 `claude plugin marketplace update vtx-insights`, then
 `claude plugin uninstall vtx-insights@vtx-insights`, then
-`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.9.3`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
+`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.9.4`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
 `vtx-insights@vtx-insights` for later lifecycle changes. The manual fallback is
 in `manual/claude.mcp.json`.
 
