@@ -6,7 +6,7 @@ Long analyses use durable `analysis.start` and `analysis.status` tools, then ret
 
 Artifact chunks are lossless: read `text` as UTF-8 bytes when `encoding=utf-8`, or decode `base64_data` when `encoding=base64`, then verify the raw `byte_count` and `content_hash` before acknowledging the chunk.
 
-The packaged Codex, Claude Code, and Cursor plugins install two skills with the
+The packaged Codex, Claude Code, and Cursor plugins install three skills with the
 MCP server. OpenCode, OpenClaw, and Hermes install the same public skills
 separately with the steps below. `vtx-insights-analysis` covers the complete VTX analysis and
 action surface.
@@ -14,6 +14,13 @@ action surface.
 reconstructs settings generations, decisions, executions, fills, position
 changes, exits, fees, funding, PnL, and market context before recommending a
 focused bot improvement.
+`vtx-bot-screener` evaluates the existing Screener prompts and combines current
+tradability with precomputed leaderboard ROI to propose symbol allocations.
+It preserves venue restrictions, open positions, and the user's distribution
+constraints; screening does not change bot settings or place trades.
+
+Try: `Use $vtx-bot-screener to screen native Hyperliquid symbols, exclude xyz,
+and propose symbols for my bots using whole-platform leaderboard ROI.`
 
 Remote server: `https://api.vtxmacro.com/insights/mcp`
 
@@ -57,7 +64,7 @@ Start another new session and reauthenticate if prompted. Codex desktop users
 can disable the plugin from Settings > Plugins. The manual MCP fallback is in
 `manual/codex.config.toml`.
 
-After updating, confirm the installed manifest reports only `2026.9.4` before
+After updating, confirm the installed manifest reports only `2026.9.5` before
 starting the new session.
 
 ## Claude Code
@@ -72,7 +79,7 @@ The one-time version-format migration sorts below the retired packed-date
 version, so an ordinary Claude update can leave the old package installed. Run
 `claude plugin marketplace update vtx-insights`, then
 `claude plugin uninstall vtx-insights@vtx-insights`, then
-`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.9.4`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
+`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.9.5`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
 `vtx-insights@vtx-insights` for later lifecycle changes. The manual fallback is
 in `manual/claude.mcp.json`.
 
@@ -93,7 +100,7 @@ vtx-insights`; remove its stored grant with `opencode mcp logout vtx-insights`.
 
 OpenCode discovers native Agent Skills under
 `~/.config/opencode/skills/<skill-name>/SKILL.md`. Clone this repository and copy
-both directories under `plugins/vtx-insights/skills/` into that global skills
+all skill directories under `plugins/vtx-insights/skills/` into that global skills
 directory, preserving each skill directory name.
 
 ## OpenClaw
@@ -112,7 +119,7 @@ permissions, then replace `YOUR_AUTHORIZATION_CODE` with the returned code.
 
 The equivalent checked configuration is in `manual/openclaw.config.json`. To
 install the VTX workflows, clone this repository and run `openclaw skills
-install <skill-directory> --global` for both directories under
+install <skill-directory> --global` for all skill directories under
 `plugins/vtx-insights/skills/`.
 
 ## Hermes Agent

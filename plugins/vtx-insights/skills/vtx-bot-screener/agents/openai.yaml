@@ -1,0 +1,11 @@
+interface:
+  display_name: "VTX Bot Screener"
+  short_description: "Screen symbols with tradability and bot ROI evidence"
+  default_prompt: "Use $vtx-bot-screener to screen native Hyperliquid symbols and propose a bot allocation using tradability and leaderboard ROI."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "vtx-insights"
+      description: "Canonical VTX screening and public bot performance evidence"
+      transport: "streamable_http"
+      url: "https://api.vtxmacro.com/insights/mcp"

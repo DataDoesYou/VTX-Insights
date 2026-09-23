@@ -6,7 +6,8 @@ description: >-
   manage settings and profiles, configure write-only connections, control bots, and
   place requested trades. Route deep causal bot-performance reviews,
   settings-generation comparisons, execution diagnoses, and win/loss investigations
-  to the bundled $vtx-bot-trade-chain-analysis skill.
+  to the bundled $vtx-bot-trade-chain-analysis skill; route symbol screening and
+  allocation proposals to $vtx-bot-screener.
 ---
 
 # VTX Insights
@@ -15,6 +16,7 @@ Use VTX Insights as the VTX data and action source. Treat this skill as the gene
 
 ## Route The Request
 
+- Use `$vtx-bot-screener` for current symbol discovery, native Hyperliquid screening, and bot allocation proposals combining tradability with existing leaderboard ROI. Screening is read-only.
 - Use `$vtx-bot-trade-chain-analysis` for questions about why bots win or lose, whether a problem is systemic, how settings generations changed outcomes, execution quality, overtrading, exits, or evidence-backed bot improvements.
 - Use the live capability registry for ordinary VTX questions, public or owned-profile comparisons, settings and profile work, connection management, bot control, and explicitly requested trading actions. Do not guess capability names or input fields.
 - Resolve the requested population explicitly: owned profiles, exact public handles or wallets, or the whole public platform. Preserve one explicit time window and cutoff across related reads.
