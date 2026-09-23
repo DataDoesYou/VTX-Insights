@@ -71,6 +71,31 @@ below to calling, completing, or consuming those views inherit this rule.
 
 ## 2. Establish Performance And Generations
 
+For ROI or model-performance comparisons with an established exact interval,
+first run `comparison.read view=roi_readiness` through `analysis.start`, using
+the same selection, `start`, and `end`. Do this before costly matrix, invocation,
+or exposure scans; reuse completed results. When a since-change composite must
+first establish the interval, reuse its boundary, then check readiness before
+additional scans. Inspect every profile's `comparable_anchors`,
+`retained_marked_return_ready`, observed anchor offsets, and `streams` for ledger,
+fills, and funding: status/reason, required and covered bounds, acquisition time,
+wallet match, and uncovered prefix/suffix seconds. Unknown gaps remain unknown.
+Readiness checks retained cutoff-visible anchors and coverage only; it computes
+no ROI, scans no decisions/fills, and performs no exchange refresh. Complete
+ledger coverage supports marked returns; fill/funding coverage separately
+qualifies those components. Coverage certification does not establish correct
+cashflow classification.
+
+For incomplete cashflows, use `vtx-wallet-cashflow-check` only from the user's
+local machine/network, never the VPS or a server refresh. Retain original
+cutoff-visible readiness and label later-acquired historical recovery separately
+with its acquisition time, full-interval coverage, and wallet/pool scope. There
+is no local-data import step in this route. Normalize deposits and sends by
+sender/recipient and equity boundary; internal transfers are not new wallet
+capital. Missing flows are not zero unless the user explicitly authorizes a
+provisional assumption. Missing ROI does not erase available behavior evidence
+or justify a model ranking from dollar PnL alone.
+
 Read complete change provenance first when recent configuration changes matter.
 Identify when each material change became effective and do not judge the new
 generation using earlier results.
@@ -105,6 +130,29 @@ When the user supplies exact custom periods, include them in the same matrix as
 timezone-aware `custom_intervals` with explicit `end_inclusive` values. Verify
 `window_count=12+custom_count` and one source load; use the one frozen cutoff
 for a "to now" interval instead of issuing separate reads.
+
+Compact and summary matrices use schema 11. `detail_counts` and omission
+reasons distinguish unrequested detail from missing evidence. Raw enabled
+settings and ordered behavior runs are omitted; `generation_detail` advertises
+full-projection paths `behavior_generations.settings_catalog` and
+`behavior_generations.contiguous_runs`. Compact retains generation action
+aggregates and group identities; summary omits those groups. Request full only
+when the exact claim needs omitted settings, ordered runs, cohorts, or campaigns.
+Economics, coverage, conservation, and inherited management remain complete.
+
+For scaling questions, use `decision.context result_view=exposure_metrics`
+with `execution_linkage=all`; inspect `metrics.by_profile[].scaling`. Report
+position observations, unavailable profitability/headroom, profitable positions,
+and the profitable-with-unit-headroom denominator before instruction counts or
+executed additions. Profitability is retained estimated after-fee profit > 0;
+headroom requires at least one global, asset, and per-prompt unit. Other limits,
+collateral, and suitability are not inferred. Repeated HOLD observations are not
+independent opportunities. Same-direction requests are not fills; executed adds
+require explicit cutoff-visible Add Long/Add Short execution evidence. Maximum
+position units and exposure/equity percentages are separate extrema, not one
+snapshot. Compare actual capital-normalized exposure and matched conditions;
+nominal unit differences alone do not invalidate a comparison. More adds or
+higher exposure does not establish better ROI or a correct trading decision.
 
 Use the matrix to compare:
 

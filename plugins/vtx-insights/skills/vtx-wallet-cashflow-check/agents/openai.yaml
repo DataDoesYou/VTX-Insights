@@ -1,0 +1,11 @@
+interface:
+  display_name: "VTX Wallet Cashflow Check"
+  short_description: "Check cashflows and capital-based ROI with local reads"
+  default_prompt: "Use $vtx-wallet-cashflow-check to check this bot's cashflows and returns locally, never from the VPS."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "vtx-insights"
+      description: "Resolve bot wallets and retained equity coverage"
+      transport: "streamable_http"
+      url: "https://api.vtxmacro.com/insights/mcp"
