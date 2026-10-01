@@ -1,6 +1,6 @@
 # VTX Insights
 
-VTX Insights connects Codex, Claude Code, OpenCode, OpenClaw, Hermes Agent, Cursor, supported GitHub Copilot surfaces, and Google Antigravity to VTX analysis, bot optimization, fleet profile management, write-only provider/exchange connections, Trader and Assistant controls, and complete trading operations on profiles the user owns.
+VTX Insights connects Codex, Claude Code, Cursor, supported GitHub Copilot surfaces, Google Antigravity, OpenCode, OpenClaw, and Hermes Agent to VTX analysis, bot optimization, fleet profile management, write-only provider/exchange connections, Trader and Assistant controls, and complete trading operations on profiles the user owns.
 
 Long analyses use durable `analysis.start` and `analysis.status` tools, then return a complete immutable artifact. Complete retrieval acknowledges exact chunk hashes through `artifact.resume`, so an interrupted host can continue from its durable checkpoint. A host response timeout never requires silently sampling or narrowing the requested VTX population.
 
@@ -73,7 +73,7 @@ Start another new session and reauthenticate if prompted. Codex desktop users
 can disable the plugin from Settings > Plugins. The manual MCP fallback is in
 `manual/codex.config.toml`.
 
-After updating, confirm the installed manifest reports only `2026.9.6` before
+After updating, confirm the installed manifest reports only `2026.10.1` before
 starting the new session.
 
 ## Claude Code
@@ -88,7 +88,7 @@ The one-time version-format migration sorts below the retired packed-date
 version, so an ordinary Claude update can leave the old package installed. Run
 `claude plugin marketplace update vtx-insights`, then
 `claude plugin uninstall vtx-insights@vtx-insights`, then
-`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.9.6`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
+`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.10.1`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
 `vtx-insights@vtx-insights` for later lifecycle changes. The manual fallback is
 in `manual/claude.mcp.json`.
 
