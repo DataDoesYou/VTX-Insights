@@ -116,11 +116,12 @@ Start compact, with `execution_linkage=all` on every view below (the default
   configured/delivered prompt consistency and provider populations; use
   `decision_rows` for a named unresolved per-decision lineage claim or when an
   exact generation-performance question requires ordered run boundaries;
-- for owned semantic review, use configured `bundle_refs` returned by prompt
+- for semantic review, use configured `bundle_refs` returned by prompt
   lineage as exact `prompt_bundle_refs` in a smallest-run
   `content_view=verbatim` prompt-lineage request. This retrieves only material
   instruction bodies; do not infer instructions from hashes or transfer every
-  per-decision context. Foreign private bodies remain unavailable;
+  per-decision context. Prompts are public, so this works for public foreign
+  profiles too;
 - body-free `effective_input_catalog audit` for dynamic input path, definition,
   availability, template, and hash/byte discovery without decision rows or
   values; and
@@ -196,8 +197,9 @@ unavailable evidence distinct. Treat replay fields as binding:
 Use `position.excursions summary` before `episode_rows`. Keep
 actual-position-path and closing-event groups separate. Reconcile eligible
 counts, exact/possible extrema, candle coverage/gaps, boundary/flip uncertainty,
-and the before-funding realized-PnL-minus-fees label. The view is not an account
-equity curve or margin simulator.
+and the before-funding realized-PnL-minus-fees label. Judge realized outcomes by
+`economics_status` and extrema by `path_status`; `status` is their union. The
+view is not an account equity curve or margin simulator.
 
 Use cutoff-pinned fully completed `market.history` candles only for an explicit
 market-path/regime claim or unresolved excursion path. Preserve canonical market

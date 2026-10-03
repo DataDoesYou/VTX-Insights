@@ -613,7 +613,12 @@ Outside the dedicated gain-giveback/exit-timing and
 exposure/scaling/re-entry routes above, start `decision.context` for entry,
 exit, fill, slippage, latency, or timing questions with
 `execution_linkage=executed`. Expand to `execution_linkage=all` when unexecuted
-decisions or HOLDs can materially change the conclusion.
+decisions or HOLDs can materially change the conclusion. When a decision must be
+tied to the campaign it opened, managed, or closed, add
+`include_position_episodes=true` (through `analysis.start`) instead of joining
+by time: each execution then carries the canonical `position.<hash>` episode IDs
+and realized campaign economics that `positions.episodes` and
+`position.excursions` use.
 
 After compact evidence identifies a material unresolved reasoning claim, use
 exact start/end for the relevant campaign or complete cohort,
@@ -705,7 +710,9 @@ Use the summary for complete per-profile and exact ledger-market/market/basis
 campaign coverage and extrema. Keep actual-position-path and closing-event
 economics separate. Keep population completeness separate from exact-economics
 completeness; quarantined or non-exact fills remain enumerable even when
-excluded from exact campaign economics.
+excluded from exact campaign economics. Filter realized-PnL claims on
+`economics_status` and price-path claims on `path_status`; `status` is their
+union, so a market-history gap must not drop a final realized outcome.
 
 Keep external historical news and bot-seen news separate. Whenever exogenous
 historical news is material, independently research timestamped primary-source
