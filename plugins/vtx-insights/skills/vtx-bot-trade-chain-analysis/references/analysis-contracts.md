@@ -34,10 +34,9 @@ still choose the windows.
 2. For generation attribution, complete `runtime.provenance change_causality
    aggregate_metrics` over the entire requested interval and retain every
    prompt, model, input-definition, symbol, deployment, release, and
-   runtime-code candidate boundary. Prompts and settings are public; a public
-   foreign profile's settings changes use the public Changelog projection, and
-   its withheld fields (inference-routing hosts, request metadata, costs,
-   runtime bodies) are unavailable and must never be inferred.
+   runtime-code candidate boundary. Another owner's bot shows everything
+   except credentials, auth, emails, and inference-host identities; those are
+   unavailable and must never be inferred.
 3. For prompt consumption or prompt-performance attribution, complete one
    `decision.context result_view=prompt_lineage` read over the exact interval
    with `lineage_projection=generation_summary` and `execution_linkage=all`
@@ -211,9 +210,10 @@ than silently sampling or using phrase matching or deterministic answer grading.
   intrabar ordering; state residual
   ambiguity.
 - When `position.excursions` returns `summary.timeframe_recommendation`, the
-  canonical resolution is past provider retention for those rows; rerun with
-  its `recommended_timeframe` as the explicit `timeframe` and label the
-  coarser resolution.
+  canonical resolution is past provider retention for those rows. Rerun only
+  its `affected_window` with `recommended_timeframe` as the explicit
+  `timeframe` and `analysis_scope=request_window`, keep the other rows from the
+  original run, and label the coarser resolution.
 
 Historical news and calendar rules live in the core skill.
 
