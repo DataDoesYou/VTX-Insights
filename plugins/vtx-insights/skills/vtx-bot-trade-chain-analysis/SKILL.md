@@ -33,6 +33,30 @@ diagnosing from aggregate PnL alone.
   and interval. Reuse returned evidence and never issue an identical call
   twice.
 
+- Read [Analysis contracts](references/analysis-contracts.md) for generation
+  attribution, activity and comparability, economic and systemic analysis,
+  semantic compliance, market regime and news, Insights evaluation, and
+  completion reporting. Read [Evidence contracts](references/evidence-contracts.md)
+  before a durable or raw artifact, exact chain expansion, reasoning-body
+  retrieval, execution/policy/excursion detail, counterfactual replay, or a
+  performance verdict. If your host installed only this file, read them at
+  https://raw.githubusercontent.com/DataDoesYou/VTX-Insights/main/plugins/vtx-insights/skills/vtx-bot-trade-chain-analysis/references/analysis-contracts.md
+  and https://raw.githubusercontent.com/DataDoesYou/VTX-Insights/main/plugins/vtx-insights/skills/vtx-bot-trade-chain-analysis/references/evidence-contracts.md.
+- `decision.context` defaults to `execution_linkage=linked`, which silently
+  drops HOLDs and every other decision without an execution record. Pass `execution_linkage=all` on every
+  population-wide view; narrow it only for a literal executed/blocked claim, and
+  name that population in the report.
+- Treat complete server-computed compact metrics as population evidence, not a
+  sample. Preserve zero-event profiles, included/excluded counts, denominators,
+  source coverage, typed missingness, and conservation rows. Prompt delivery is
+  not semantic compliance, and execution is not proof that an instruction was
+  valid, compliant, or economically correct.
+- Treat broken cursors, missing rows or chunks, count/hash mismatches, corrupt
+  artifacts, authorization/schema errors, cutoff crossings, and incomplete
+  transport as blockers for the affected claim. Keep unavailable, inactive,
+  missing, false, and zero distinct, and never backfill current settings,
+  inputs, account state, news, or market values into a historical decision.
+
 - Judge cutoff drift from the explicit requested end, the result cutoff or
   effective end, and data-bearing business-row timestamps. A later job or
   artifact `data_cutoff`, `as_of`, `created_at`, authorization, invocation, or
@@ -61,8 +85,17 @@ it. When a route in this skill fully specifies the needed calls, do not call
 `help.search`, `list_mcp_resources`, `read_mcp_resource`, a capability catalog,
 or any other Help/schema-discovery surface before starting that route.
 
+Restate the literal question and its required claims, select one route, and
+stop when those claims are answered. Do not widen the route to chase adjacent
+findings; report material ones with their evidence and the change that would
+address them.
+
 Replay the exact selection and cutoff on every independent profile-scoped call.
-Do not assume `scope=profile` selects a named profile.
+Do not assume `scope=profile` selects a named profile. A same-thread follow-up
+inherits only the exact selection, cutoff, interval, symbols, and scenario
+values already established; never infer new thresholds or broaden the
+population, reuse completed evidence, and run only the missing claim-specific
+view.
 
 Every `positions.episodes` `window_matrix` or `event_detail` request is a
 deterministic known-large read. Start it directly through `analysis.start`
@@ -71,12 +104,53 @@ below to calling, completing, or consuming those views inherit this rule.
 
 ## 2. Establish Performance And Generations
 
+A bot's current success is its cashflow-adjusted marked equity: realized and
+unrealized PnL net of costs, including open positions without a closing fill.
+Lead every performance verdict with that equity result. Closed-trade metrics,
+win rates, and campaign detail explain how the equity was earned; they never
+replace or discount it, including for possible future giveback or because gains
+predate the comparison window. To explain that equity, keep three economic
+views distinct:
+
+- **Requested period:** cashflow-adjusted marked account return includes the
+  change in unrealized PnL. Read it from `comparison.read view=summary` with the
+  same selection, `start`, and `end`: each profile's `finance.marked_pnl_usd` is
+  end minus start equity minus net cashflows, and `finance.return_pct` divides it
+  by account capital; `performance_status` and `unavailable_reason` say when
+  either is unavailable. Reconcile realized PnL plus ending minus starting
+  unrealized PnL, fees, funding, and other material account components on the
+  same equity boundary. Do not subtract costs already included in a source.
+- **Open at cutoff:** enumerate every selected profile's open positions,
+  including inherited positions and those with no fills during the period.
+  Report symbol, direction, quantity/notional, entry and mark prices, unrealized
+  PnL, account equity, and exposure/equity where available. Use the latest
+  retained decision-time position and account state at or before the cutoff
+  from `decision.context`; use `account.snapshot` only when the cutoff is now,
+  because it reports current live state. State freshness and missingness;
+  unavailable is not flat. The UI's margin ROE is not account ROI.
+- **Campaign since entry:** for material winning and losing open positions,
+  trace entry, adds, reductions, and HOLDs through the cutoff. Include realized
+  reductions and remaining unrealized PnL, with covered costs, without requiring
+  an exit. Label open campaigns ongoing; keep them out of completed-campaign win
+  rates. Separate gains inherited at the window start from changes during the
+  window and attribute actions to their actual generations. If entry history is
+  unavailable, report the observed open result with partial attribution.
+
+Reuse complete compact evidence and expand only the missing material view. Do
+not add the current unrealized PnL stock to marked account or leaderboard PnL;
+that double counts gains. Use supported account-capital denominators for ROI,
+not margin, and never sum percentages across positions. Include these views in
+the verdict so a short-window drawdown does not erase an earlier profitable
+entry or successful scaling, while preserving the requested period unchanged.
+Keep missing valuations and campaign history explicit rather than falling back
+to closed trades as the verdict.
+
 For ROI or model-performance comparisons with an established exact interval,
-first run `comparison.read view=roi_readiness` through `analysis.start`, using
-the same selection, `start`, and `end`. Do this before costly matrix, invocation,
-or exposure scans; reuse completed results. When a since-change composite must
-first establish the interval, reuse its boundary, then check readiness before
-additional scans. Inspect every profile's `comparable_anchors`,
+check readiness before costly matrix, invocation, or exposure scans, reusing
+completed results. A route calling `comparison.read view=summary` reads each
+profile's `roi_readiness` from it; otherwise run `view=roi_readiness` through
+`analysis.start` with the same selection, `start`, and `end`, reusing any
+since-change composite boundary. Inspect every profile's `comparable_anchors`,
 `retained_marked_return_ready`, observed anchor offsets, and `streams` for ledger,
 fills, and funding: status/reason, required and covered bounds, acquisition time,
 wallet match, and uncovered prefix/suffix seconds. Unknown gaps remain unknown.
@@ -86,8 +160,8 @@ ledger coverage supports marked returns; fill/funding coverage separately
 qualifies those components. Coverage certification does not establish correct
 cashflow classification.
 
-For incomplete cashflows, use `vtx-wallet-cashflow-check` only from the user's
-local machine/network, never the VPS or a server refresh. Retain original
+For incomplete cashflows, use the bundled `vtx-wallet-cashflow-check` skill
+only from the user's local machine/network, never the VPS or a server refresh. Retain original
 cutoff-visible readiness and label later-acquired historical recovery separately
 with its acquisition time, full-interval coverage, and wallet/pool scope. There
 is no local-data import step in this route. Normalize deposits and sends by
@@ -95,6 +169,12 @@ sender/recipient and equity boundary; internal transfers are not new wallet
 capital. Missing flows are not zero unless the user explicitly authorizes a
 provisional assumption. Missing ROI does not erase available behavior evidence
 or justify a model ranking from dollar PnL alone.
+
+Before any cross-profile or before/after performance attribution, apply the
+**Activity And Comparability Contract** in
+[analysis contracts](references/analysis-contracts.md). A composite result does
+not waive that check, and missing evidence does not authorize new tooling or
+production changes.
 
 Read complete change provenance first when recent configuration changes matter.
 Identify when each material change became effective and do not judge the new
@@ -115,7 +195,7 @@ selection and cutoff.
 Use `matrix_projection=full` only when a literal setting or input-cohort claim
 requires the high-cardinality detail omitted by compact. When recent changes define the requested cohort,
 resolve each selected profile's latest relevant material change and keep
-qualifying timestamps within seven days. If exactly one qualifying timestamp
+qualifying timestamps within the advertised material-change lookback. If exactly one qualifying timestamp
 remains, use it as `adaptive_start`; if multiple remain, use their latest
 timestamp (`max(timestamps)`) as the one shared `adaptive_start`. This includes
 a single selected profile and a multi-profile selection where only one profile
@@ -128,13 +208,14 @@ windows without repeating them as separate calls.
 
 When the user supplies exact custom periods, include them in the same matrix as
 timezone-aware `custom_intervals` with explicit `end_inclusive` values. Verify
-`window_count=12+custom_count` and one source load; use the one frozen cutoff
+that `window_count` equals the returned standard, adaptive, and disjoint
+windows plus `custom_count` and that there was one source load; use the one frozen cutoff
 for a "to now" interval instead of issuing separate reads.
 
-Compact and summary matrices use schema 11. `detail_counts` and omission
-reasons distinguish unrequested detail from missing evidence. Raw enabled
-settings and ordered behavior runs are omitted; `generation_detail` advertises
-full-projection paths `behavior_generations.settings_catalog` and
+Compact and summary matrices report their `schema_version`. `detail_counts`
+and omission reasons distinguish unrequested detail from missing evidence. Raw
+enabled settings and ordered behavior runs are omitted; `generation_detail`
+advertises full-projection paths `behavior_generations.settings_catalog` and
 `behavior_generations.contiguous_runs`. Compact retains generation action
 aggregates and group identities; summary omits those groups. Request full only
 when the exact claim needs omitted settings, ordered runs, cohorts, or campaigns.
@@ -156,8 +237,8 @@ higher exposure does not establish better ROI or a correct trading decision.
 
 Use the matrix to compare:
 
-- net and gross PnL, fees, funding, volume, win rate, expectancy, drawdown, and
-  completed campaigns;
+- net and gross PnL, fees, funding, volume, win rate, expectancy, drawdown,
+  completed campaigns, and open campaigns at the cutoff;
 - instruments, directions, settings generations, sessions, and action
   sequences; and
 - recent performance against non-overlapping earlier evidence without blending
@@ -173,7 +254,8 @@ source-coverage, campaign, or execution-cost question:
 
 1. Choose one explicit cutoff and call `analysis.start` directly for one
    `positions.episodes result_view=window_matrix` request with
-   `matrix_projection=compact` and
+   `matrix_projection=compact` (or `summary` when only overall, profile, and
+   asset economics and coverage are needed) and
    `selection={"population":"whole_platform"}`. Do not make a synchronous
    probe, discover a ranked profile subset, or start a second position-episode
    source job.
@@ -195,8 +277,10 @@ source-coverage, campaign, or execution-cost question:
    small indexed paths in one round trip or to stream typed predicates over one
    exact indexed list/object. A large predicate scan still examines every
    member of that parent, so submit the unchanged batch through `analysis.start`
-   if it exceeds the response window. Keep each returned path's exact versus
-   structure projection and continuation separate. Use individual
+   if it exceeds the response window. Continue an advertised filter page with
+   its exact `next_match_offset`, and narrow the disclosed parent when the scan
+   budget rejects it. Keep each returned path's exact versus structure
+   projection and continuation separate. Use individual
    `artifact.query` for legacy unindexed artifacts or durable exact retrieval.
 5. When execution cost is part of the question, call
    `execution.quality result_view=summary` separately with the same explicit
@@ -209,14 +293,16 @@ source-coverage, campaign, or execution-cost question:
    it before parsing and follow its advertised manifest/resume contract without
    changing the original handle's retrieval mode.
 
+Platform scope never authorizes private profile data.
 Do not retrieve an all-history event ledger, raw decision reasoning, or complete
 artifact for this route unless a separate causal question genuinely requires
 exact chains. If it does, start that expansion as a separate, cutoff-identical
 request and state the unresolved claim first.
 
 For fleet-wide premature-close, same-candle reversal, or unchanged-evidence
-questions, use `decision.context result_view=adjacent_transition_audit` with an
-exact start and end before requesting raw reasoning. It returns the complete
+questions, use `decision.context result_view=adjacent_transition_audit` with
+`execution_linkage=all` and an exact start and end before requesting raw
+reasoning. It returns the complete
 selected non-HOLD transition population with the preceding same-profile/symbol
 typed action, body-free candle-identity delta, reasoning availability, and
 cutoff-safe execution outcome.
@@ -231,11 +317,16 @@ When the user asks to review trades since settings changed:
    `analysis.start` for a long or all-history read—and call the one
    full-selection `window_matrix` with `matrix_projection=compact`.
 2. Use the matrix's returned adaptive-window start as the exact `start` for
-   interval-scoped `policy.evaluate summary`, `decision.context
-   exposure_metrics`, `position.excursions summary`, and any compact decision
-   context. Replay the same selection and cutoff.
+   interval-scoped `comparison.read view=summary`, `policy.evaluate summary`,
+   `decision.context exposure_metrics`, `position.excursions summary`, and any
+   compact decision context. Replay the same selection and cutoff. The
+   comparison summary supplies the marked-equity verdict.
 3. Complete those compact reads before starting ledger or reasoning expansion.
-4. Start the one complete all-history `event_detail` ledger with no `start`.
+4. Start an `event_detail` ledger, scoped as **Reconstruct Complete Chains**
+   describes, only when the compact reads leave a named row-level claim
+   unresolved, such as exact event
+   order across the change boundary or an inherited position, or when the user
+   or host explicitly requests the complete ledger.
 5. Wait for an exact user-supplied counterfactual scenario or threshold
    follow-up before calling `policy.replay`; never invent default replay inputs.
 
@@ -255,14 +346,15 @@ general expansion rule applies only to `context_rows`, and a completed exposure
 request must never be repeated. Treat
 `policy.evaluate summary` as complete unless the user's literal question
 explicitly asks for a per-decision enforcement audit; a nonzero or unavailable
-summary value alone does not justify `decision_rows`. After the ledger, make at
-most one optional `decision.context context_rows` expansion for the general
-settings-change review, and consume it completely before starting another job.
-Before starting it, name the exact unresolved claim in the working analysis.
-If the compact evidence and ledger already answer every material claim, stop
-without a reasoning expansion.
+summary value alone does not justify `decision_rows`. After the compact reads
+and any ledger, make at most one optional `decision.context context_rows`
+expansion for the general settings-change review, and consume it completely
+before starting another job. Before starting it, name the exact unresolved
+claim in the working analysis. If the compact evidence already answers every
+material claim, stop without a ledger or reasoning expansion.
 
-Use enabled path/catalog, behavior hash, and prompt hash metadata for generation
+Current settings are current state, not historical generation authority. Use
+enabled path/catalog, behavior hash, and prompt hash metadata for generation
 comparison. Do not treat disabled, unset, inherited, or UI-only values as active;
 request the complete settings view only when an exact raw value or prompt body
 can materially change the claim.
@@ -290,20 +382,26 @@ asking for settings-change attribution:
    `standard_windows.all.complete_metrics.time_coverage.first_event_at` as the
    exact investigation start. If it is null, report that no retained campaign
    exists instead of issuing a schema-invalid excursion request.
-3. Call direct `execution.quality summary` with
-   `decision_target_settings=omit` and direct `position.excursions summary`,
-   using the exact established investigation start, selection, and cutoff.
-   Execution summary is material here because it separates execution failure
-   from strategy failure even when the user did not mention fills explicitly.
-4. Complete the matrix and both summaries before starting and completely
-   consuming the one all-history `event_detail` ledger with no `start`.
-5. Only after those compact reads and the ledger, start one complete
-   `decision.context context_rows` reasoning audit with the same established
-   investigation start, `execution_linkage=all`,
-   `content_view=audit`, and `include_reasoning=true`, and consume it completely.
+3. Call direct `comparison.read view=summary`, direct `execution.quality
+   summary` with `decision_target_settings=omit`, and direct
+   `position.excursions summary`, using the exact established investigation
+   start, selection, and cutoff. The comparison summary supplies the
+   marked-equity verdict on whether and how much each bot lost. Execution
+   summary is material here because it separates execution failure from
+   strategy failure even when the user did not mention fills explicitly.
+4. Complete the matrix and all three summaries first. Start an `event_detail`
+   ledger, scoped as **Reconstruct Complete Chains** describes, only when they
+   leave a named campaign-level causal claim unresolved or the user or host explicitly
+   requests the complete ledger, then consume it completely.
+5. Start one complete `decision.context context_rows` reasoning audit with the
+   same established investigation start, `execution_linkage=all`,
+   `content_view=audit`, and `include_reasoning=true` only when decision logic
+   can change the verdict or the user or host explicitly requests it, after the
+   compact reads and any ledger, and consume it completely.
 
-Use the ledger to compare losing campaigns with profitable counterexamples and
-explicit zero-event profiles before calling the behavior systemic. Do not add
+Compare losing campaigns with profitable counterexamples and explicit
+zero-event profiles, from compact campaign economics or the ledger when one was
+needed, before calling the behavior systemic. Do not add
 runtime provenance unless the literal question asks for change attribution.
 
 ### Gain-Giveback And Exit-Timing Route
@@ -319,18 +417,22 @@ When the user asks whether one campaign gave back gains or exited late:
    `execution.quality summary` with `decision_target_settings=omit` for the
    exact campaign start, symbol, selection, and cutoff.
 3. Complete the matrix and both summaries before starting any durable
-   expansion. Then consume the complete all-history `event_detail` ledger with
-   no `start`, the exact campaign's `position.excursions episode_rows`, and
-   cutoff-pinned fully completed `market.history` candles.
-4. After the compact excursion evidence, start exactly one
-   `decision.context context_rows` audit for the campaign through
-   `analysis.start` with `execution_linkage=all`, `content_view=audit`,
-   `include_reasoning=true`, and `include_candle_coverage=false`; consume it
-   completely. Do not make an `executed` precursor or repeat the reasoning
-   request.
+   expansion. Then retrieve only what the claim still needs, or what the user
+   or host explicitly requests, and consume each completely: the exact
+   campaign's `position.excursions episode_rows` and cutoff-pinned fully
+   completed `market.history` candles when exact path or timing is material,
+   and an `event_detail` ledger for the campaign interval when exact event
+   order remains unresolved.
+4. When decision logic can change the verdict, or the user or host explicitly
+   requests it, start exactly one `decision.context context_rows` audit for the
+   campaign through `analysis.start` with `execution_linkage=all`,
+   `content_view=audit`, `include_reasoning=true`, and
+   `include_candle_coverage=false`; consume it completely. Do not make an
+   `executed` precursor or repeat the reasoning request.
 
 For this route, the matrix and both summaries must complete before any durable
-call starts. Make one all-linkage reasoning request and no executed precursor.
+call starts. Make at most one all-linkage reasoning request and no executed
+precursor.
 
 For a claim that the campaign gave back gains, use only the exact
 `actual_position_path.confirmed_profit_giveback_usd` aggregate. Its eligible
@@ -356,16 +458,17 @@ are already established:
    `matrix_projection=compact` and `adaptive_start` omitted. Call direct
    `execution.quality summary` with
    `decision_target_settings=omit`, the exact selection, investigation start,
-   and cutoff, but no `symbols` filter. Call direct `decision.context
-   context_rows` for the exact loss symbols with `execution_linkage=executed`,
-   `content_view=audit`, `include_reasoning=false`, and
-   `include_candle_coverage=false`, replaying the same selection, start, and
-   cutoff.
-3. Complete the matrix, execution summary, and compact decision context before
-   starting exactly one `execution.quality detail_rows` request through
+   and cutoff, but no `symbols` filter. When decision context is material or
+   explicitly requested, call direct `decision.context context_rows` for the
+   exact loss symbols with `execution_linkage=executed`, `content_view=audit`,
+   `include_reasoning=false`, and `include_candle_coverage=false`, replaying the
+   same selection, start, and cutoff.
+3. Complete the matrix, execution summary, and any compact decision context
+   first. Start one `execution.quality detail_rows` request through
    `analysis.start`, again with `decision_target_settings=omit`, the same
-   selection, start, and cutoff, and no `symbols` filter. Consume the complete
-   artifact.
+   selection, start, and cutoff, and no `symbols` filter, only when raw
+   execution rows or target-versus-executed evidence can change the answer or
+   the user or host explicitly requests them. Consume the complete artifact.
 4. Do not retrieve an event ledger or decision reasoning unless a separate
    causal question makes that evidence material.
 
@@ -379,21 +482,25 @@ retained, spread and slippage are unavailable, not zero.
 
 ### Guardrail Effect And Max-Drawdown Replay Route
 
-When the user asks whether a guardrail blocked or warned and supplies the exact
-Max Drawdown 1.5/2.5 over six hours comparison, with an exact selection,
-investigation start, and cutoff already established:
+When the user asks whether a guardrail blocked or warned, with an exact
+selection, investigation start, and cutoff already established:
 
 1. Reuse the exact selection, investigation start, and cutoff. Do not call
    `profiles.discover`, Help, or schema discovery.
-2. Call exactly one `settings.read current_bot_settings`, then direct
-   `policy.evaluate summary` with the same selection, start, and cutoff.
-3. Complete both compact calls before starting exactly one `policy.evaluate
-   decision_rows` request through `analysis.start` with the same selection,
-   start, and cutoff. Consume its complete artifact exactly once.
-4. Only after the decision rows are complete, call exactly one direct
+2. Call one `settings.read current_bot_settings` when current configuration is
+   material, then direct `policy.evaluate summary` with the same selection,
+   start, and cutoff.
+3. Complete the compact calls first. Start one `policy.evaluate decision_rows`
+   request through `analysis.start` with the same selection, start, and cutoff
+   only when per-decision enforcement, evidence mode, comparator, threshold, or
+   incomplete reason is material, or the user or host explicitly requests it.
+   Consume its complete artifact exactly once.
+4. Only when the user supplied an exact counterfactual, and after the compact
+   evidence and any decision rows are complete, call exactly one direct
    `policy.replay result_view=comparison` with the same selection, start, and
-   cutoff and the JSON object scenario whose `scenario_version` value is the
-   string `"2"`:
+   cutoff. Build the advertised versioned scenario only from the user's values;
+   its `scenario_version` is the string `"2"`. For example, a 1.5/2.5 over six
+   hours Max Drawdown comparison is
    `{"scenario_version":"2","scenario_type":"max_drawdown","window_hours":6,"warning_pct":1.5,"critical_pct":2.5,"enforcement":"hard"}`.
 
 Keep observed retained, observed repair, unavailable, and recomputed replay
@@ -417,18 +524,24 @@ established:
    and `include_candle_coverage=false`, plus direct `policy.evaluate summary`,
    replaying the same selection, start, and cutoff on both interval calls.
 3. Complete the matrix, exposure metrics, and policy summary before starting
-   any durable expansion. Then start and completely consume, one at a time:
-   the one all-history `event_detail` ledger with no `start`; exactly one
-   relevant `decision.context context_rows` request with
+   any durable expansion. Then start only the expansions a named unresolved
+   claim needs, or that the user or host explicitly requests, one at a time and
+   each completely consumed: an `event_detail` ledger scoped as **Reconstruct
+   Complete Chains** describes; one relevant `decision.context context_rows` request with
    `execution_linkage=all`, `content_view=audit`, `include_reasoning=true`, and
-   `include_candle_coverage=false`; and exactly one `policy.evaluate
-   decision_rows` request with the established start. Replay the exact
-   selection and cutoff on every call and consume each artifact exactly once.
+   `include_candle_coverage=false`; and one `policy.evaluate decision_rows`
+   request with the established start. Replay the exact selection and cutoff on
+   every call and consume each artifact exactly once.
 
 Use policy evidence, not decision-context absence, to distinguish a warning,
 deterministic block, or unavailable enforcement evidence. Every compact call
 must be complete before each durable expansion starts, and one durable artifact
 must be fully consumed before starting the next.
+
+Use exact retained inputs and candle close/event times to distinguish genuinely
+new evidence from duplicate evidence, thesis relabeling, or unsupported adds.
+Preserve profitable trend scaling while testing whether concentration, loss
+velocity, or re-entry controls remove a measured loss cluster.
 
 ## 3. Reconstruct Complete Chains
 
@@ -459,10 +572,13 @@ acknowledged, failed, retry, and outcome-unknown dispatches in Server and Client
 Mode. Keep intent audits separate, retain legacy absence as unavailable, and do
 not infer BBO, spread, or latency from nearest timestamps.
 
-Retrieve `positions.episodes` with `result_view=event_detail` for the complete
-requested window through `analysis.start` without a synchronous probe. For an
-explicitly comprehensive full-history audit, start one all-history unselected
-`event_detail` request through `analysis.start` and reuse it for every interval.
+Raw expansion is never a default step. Retrieve `positions.episodes`
+with `result_view=event_detail` through `analysis.start`, without a synchronous
+probe, only for a named unresolved row-level causal claim or an explicit user
+or host request, bounded to the smallest exact interval, campaign, profile, and
+symbol that can resolve it. Omit `start` only for an explicit all-history claim
+or when inherited exposure cannot be resolved from a narrower boundary.
+Reuse one completed ledger for every interval it covers.
 
 Select complete-chunk retrieval for this ledger: make `artifact.manifest` the
 first access to its handle. That manifest call commits the handle to complete
@@ -483,7 +599,7 @@ Trace each material campaign without gaps:
 ```text
 settings generation -> analysis -> decision -> execution or block
 -> canonical fill -> position change -> later decisions and HOLDs
--> reduction or exit -> realized result
+-> reduction/exit or open at cutoff -> realized/marked result
 ```
 
 Start from executed campaigns. Select losing and winning contrasts, both sides
@@ -508,7 +624,8 @@ never guess or flatten a settings path. Use `content_view=verbatim` only when
 exact stored prompt, response, or full-context bytes are necessary.
 
 For model/provider reliability questions, first use `decision.context
-result_view=model_reasoning_outcome_metrics` over the complete cohort. Compare
+result_view=model_reasoning_outcome_metrics` with `execution_linkage=all`
+over the complete cohort. Compare
 requested/actual primary and review lineage, fallback/retry/failure/parse/
 refusal state, review changes, final action, execution linkage, and reasoning
 availability. Keep `legacy_unknown` separate and expand exact text only for a
@@ -523,8 +640,9 @@ Inspect:
 - whether repeated evidence, thesis drift, review behavior, or stale context
   affected the chain.
 
-Use `decision.context result_view=exposure_metrics` for complete max-exposure
-and retained trading-limit arithmetic. Use a live `account.snapshot` for current
+Use `decision.context result_view=exposure_metrics` with
+`execution_linkage=all` for complete max-exposure and retained trading-limit
+arithmetic. Use a live `account.snapshot` for current
 positions; unavailable does not mean flat.
 
 Retrieve market history only for an explicit candle or market-path question, or
@@ -556,7 +674,12 @@ reason, and completed-candle evidence. Keep prompt restrictions, observed determ
 blocks, observed repair, unavailable evidence, and recomputed replay evidence
 distinct.
 
-Use `policy.replay` only for deterministic counterfactual gates and thresholds.
+Use `policy.replay` only for deterministic counterfactual gates and thresholds,
+with the advertised versioned scenario (`scenario_version` `"2"` and a
+`scenario_type` of `tradability_threshold`, `loss_count`, or `max_drawdown`)
+built only from the user's values. Use replay `event_detail` only when
+individual transition rows can change the answer. For Max Drawdown, also report
+candidate, trusted, and excluded point counts.
 Wait for the user to supply the exact scenario or threshold, including its
 window and enforcement when applicable; never invent or preemptively replay
 default values before that question is asked.
@@ -584,9 +707,17 @@ economics separate. Keep population completeness separate from exact-economics
 completeness; quarantined or non-exact fills remain enumerable even when
 excluded from exact campaign economics.
 
-Use your agent's native web research only as supplemental outside evidence. Use
-`decision.context`, `market.news`, and `market.calendar` for the exact
-VTX-managed context the bot received.
+Keep external historical news and bot-seen news separate. Whenever exogenous
+historical news is material, independently research timestamped primary-source
+external web evidence for market context. VTX `{news}`, Benzinga, and
+`market.news` evidence are only bot-seen or prompt-inclusion evidence, never the
+primary historical-news route. Only retained `decision.context` effective-input
+evidence can prove what entered a historical bot prompt; `market.news` is only
+the bounded current cache tail. Use `market.calendar` only within its returned
+cached coverage, and keep event, publication, ingestion, decision, and
+prompt-inclusion times distinct. Missing retention is not confirmed absence,
+and external relevance never proves prompt inclusion. For market regime claims, follow **Market
+Regime And News** in [analysis contracts](references/analysis-contracts.md).
 
 ## 6. Recommend The Smallest Useful Experiment
 
@@ -638,9 +769,10 @@ or generation is too new.
   decision counts and `recorded_executed` state. Do not use policy-summary
   execution-action counts for that denominator; one flip decision can produce
   multiple execution actions.
-- For a multi-action chain, reconcile stated net PnL as eligible realized PnL
-  minus every included fee. If exact economics are incomplete, label the net
-  unavailable instead of dropping a fee.
+- For a multi-action chain, reconcile the realized component as eligible
+  realized PnL minus every included fee. If exact economics are incomplete,
+  label the realized net unavailable instead of dropping a fee. An open chain's
+  result also needs its marked unrealized component.
 - When reporting a fee share, name whether its denominator is realized PnL
   before fees, net PnL after fees, or notional. Never label net loss as gross.
 - Attribute observed blocks to their exact retained status and reason category.
@@ -659,6 +791,9 @@ Lead with the verdict. Include:
 6. profitable behavior worth preserving;
 7. a keep, tune, pause, or observe recommendation matrix; and
 8. limitations and the evidence that would change the verdict.
+
+Mark every requested claim `complete`, `partial`, or `blocked`; do not call the
+analysis complete while a material requested claim is partial or blocked.
 
 Avoid false precision. A model mistake is possible; missing, misleading,
 incomplete, unauthorized, or incorrect VTX tool evidence is the connector issue

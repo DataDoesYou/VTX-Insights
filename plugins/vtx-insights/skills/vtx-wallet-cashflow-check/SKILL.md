@@ -7,7 +7,9 @@ description: Check a selected VTX bot wallet's cashflows, fills, and capital-bas
 
 Use this for a requested wallet cashflow or return check, especially when retained
 Insights data has an uncovered interval. For a requested performance calculation
-or chart, also read [Return calculations](references/returns.md).
+or chart, also read [Return calculations](references/returns.md); if your host
+installed only this file, read it at
+https://raw.githubusercontent.com/DataDoesYou/VTX-Insights/main/plugins/vtx-insights/skills/vtx-wallet-cashflow-check/references/returns.md.
 
 ## Scope and source
 
