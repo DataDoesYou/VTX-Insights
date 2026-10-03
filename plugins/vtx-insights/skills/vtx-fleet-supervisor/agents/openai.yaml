@@ -1,0 +1,11 @@
+interface:
+  display_name: "VTX Fleet Supervisor"
+  short_description: "Watch your bots for stops, errors, losses, and giveback"
+  default_prompt: "Use $vtx-fleet-supervisor to check my VTX bots and tell me only what needs my attention."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "vtx-insights"
+      description: "Read-only VTX bot status, history, positions, and performance"
+      transport: "streamable_http"
+      url: "https://api.vtxmacro.com/insights/mcp"

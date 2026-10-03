@@ -6,7 +6,7 @@ Long analyses use durable `analysis.start` and `analysis.status` tools, then ret
 
 Artifact chunks are lossless: read `text` as UTF-8 bytes when `encoding=utf-8`, or decode `base64_data` when `encoding=base64`, then verify the raw `byte_count` and `content_hash` before acknowledging the chunk.
 
-The packaged Codex, Claude Code, and Cursor plugins install four skills with the
+The packaged Codex, Claude Code, and Cursor plugins install five skills with the
 MCP server. OpenCode, OpenClaw, and Hermes install the same public skills
 separately with the steps below. `vtx-insights-analysis` covers the complete VTX analysis and
 action surface.
@@ -27,6 +27,13 @@ from an account’s authored-transaction history alone. The host must support
 bounded local reads and respect the user’s endpoint restrictions. Public
 Hyperliquid requests must originate locally, never from the VPS; the skill
 does not trade or poll.
+
+`vtx-fleet-supervisor` is a read-only fleet check for on-demand or scheduled
+runs. It reports bots that should be running but are not, closed Client Mode
+hosts, Hyperliquid and model-provider errors, deep unrealized losses, stale or
+orphaned open orders, profit giveback, the biggest winners and losers, and odd
+trades, and stays to one all-clear line when nothing needs attention. It needs
+only `insights:read` and never changes settings, controls bots, or trades.
 
 Try: `Use $vtx-bot-screener to screen native Hyperliquid symbols, exclude xyz,
 and propose symbols for my bots using whole-platform leaderboard ROI.`
@@ -73,7 +80,7 @@ Start another new session and reauthenticate if prompted. Codex desktop users
 can disable the plugin from Settings > Plugins. The manual MCP fallback is in
 `manual/codex.config.toml`.
 
-After updating, confirm the installed manifest reports only `2026.10.4` before
+After updating, confirm the installed manifest reports only `2026.10.5` before
 starting the new session.
 
 ## Claude Code
@@ -88,7 +95,7 @@ The one-time version-format migration sorts below the retired packed-date
 version, so an ordinary Claude update can leave the old package installed. Run
 `claude plugin marketplace update vtx-insights`, then
 `claude plugin uninstall vtx-insights@vtx-insights`, then
-`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.10.4`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
+`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.10.5`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
 `vtx-insights@vtx-insights` for later lifecycle changes. The manual fallback is
 in `manual/claude.mcp.json`.
 
@@ -172,6 +179,136 @@ Antigravity has a searchable MCP Store, but VTX Insights is not currently listed
 After saving the server, select **Authenticate**, complete VTX sign-in in the browser, copy the authorization code back into Antigravity, and select **Submit**. Dynamic client registration creates the client automatically, but this user confirmation flow is still required.
 
 For a versioned plugin fallback, copy `plugins/vtx-insights` to `.agents/plugins/vtx-insights` or `_agents/plugins/vtx-insights` for one workspace, or to `~/.gemini/config/plugins/vtx-insights` globally. Its root `plugin.json` and `mcp_config.json` expose the same server and reuse the shared VTX Insights skill.
+
+## Scheduled fleet monitoring
+
+`vtx-fleet-supervisor` can run unattended on a schedule. Connect it to the
+read-only monitor address, `https://api.vtxmacro.com/insights/monitor/mcp`: VTX
+grants it only Analyze access whatever the agent requests, and its permissions
+never merge with the agent's other VTX connections. These recipes were verified
+with unattended scheduled runs.
+
+### Codex
+
+1. Add the read-only VTX monitor address and approve the connection in the browser. VTX shows only Analyze for this address, whatever Codex requests.
+
+   ```
+   codex mcp add vtx-monitor --url https://api.vtxmacro.com/insights/monitor/mcp
+   ```
+
+2. Run one check and confirm it reports your bots.
+
+   ```
+   codex exec --skip-git-repo-check 'Use $vtx-fleet-supervisor with the vtx-monitor server to check my VTX bots and tell me only what needs my attention.'
+   ```
+
+3. Schedule the same command with cron on macOS or Linux (use the full path to codex if cron cannot find it), or Task Scheduler on Windows. Each run appends its report to the log file; forward that file to your own notifier if you want alerts.
+
+   ```
+   0 */4 * * * codex exec --skip-git-repo-check 'Use $vtx-fleet-supervisor with the vtx-monitor server to check my VTX bots and tell me only what needs my attention.' >> ~/vtx-monitor.log 2>&1
+   ```
+
+### Claude Code
+
+1. Add the read-only VTX monitor address. Its permissions stay separate from any other Claude Code connection to VTX.
+
+   ```
+   claude mcp add --transport http --scope user vtx-monitor https://api.vtxmacro.com/insights/monitor/mcp
+   ```
+
+2. Sign in to VTX and approve the connection. VTX shows only Analyze for this address.
+
+   ```
+   claude mcp login vtx-monitor
+   ```
+
+3. Run one check and confirm it reports your bots.
+
+   ```
+   claude -p 'Use the vtx-fleet-supervisor skill with the vtx-monitor server to check my VTX bots and tell me only what needs my attention.' --allowedTools mcp__vtx-monitor Skill
+   ```
+
+4. Schedule the same command with cron on macOS or Linux (use the full path to claude if cron cannot find it), or Task Scheduler on Windows. Each run appends its report to the log file; forward that file to your own notifier if you want alerts.
+
+   ```
+   0 */4 * * * claude -p 'Use the vtx-fleet-supervisor skill with the vtx-monitor server to check my VTX bots and tell me only what needs my attention.' --allowedTools mcp__vtx-monitor Skill >> ~/vtx-monitor.log 2>&1
+   ```
+
+### OpenClaw
+
+1. Add the read-only VTX monitor address.
+
+   ```
+   openclaw mcp add vtx-monitor --url https://api.vtxmacro.com/insights/monitor/mcp --transport streamable-http --auth oauth --timeout 120
+   ```
+
+2. Open the printed link and approve the connection; VTX shows only Analyze for this address. If the browser cannot reach the local callback, finish with openclaw mcp login vtx-monitor --code YOUR_AUTHORIZATION_CODE.
+
+   ```
+   openclaw mcp login vtx-monitor
+   ```
+
+3. Confirm the monitor tools are available.
+
+   ```
+   openclaw mcp doctor vtx-monitor --probe
+   ```
+
+4. Install the fleet supervisor skill from your VTX-Insights clone.
+
+   ```
+   openclaw skills install ./VTX-Insights/plugins/vtx-insights/skills/vtx-fleet-supervisor --global
+   ```
+
+5. Keep the OpenClaw gateway running; scheduled jobs fire only while it runs.
+
+   ```
+   openclaw gateway run
+   ```
+
+6. Schedule the check. The job needs the read tool to load the skill and must name its file, because OpenClaw drops the skill list for jobs with a tool allowlist. Replace the webhook with your receiver, or deliver to a connected chat channel with --announce.
+
+   ```
+   openclaw cron add --name vtx-fleet-check --every 4h --session isolated --message "Use the vtx-fleet-supervisor skill (read ~/.openclaw/skills/vtx-fleet-supervisor/SKILL.md first) with the vtx-monitor server to check my VTX bots and tell me only what needs my attention." --tools 'vtx-monitor__*,read' --timeout-seconds 900 --webhook https://YOUR_RECEIVER/vtx
+   ```
+
+### Hermes Agent
+
+1. In a terminal, add the read-only VTX monitor address, approve the connection in the browser (VTX shows only Analyze), and enable its tools when Hermes asks.
+
+   ```
+   hermes mcp add vtx-monitor --url https://api.vtxmacro.com/insights/monitor/mcp --auth oauth --connect-timeout 315
+   ```
+
+2. Let unattended runs use the monitor's tools. The address itself is read-only, and Hermes' untrusted mode currently blocks unattended reads.
+
+   ```
+   hermes config set mcp_servers.vtx-monitor.trust full
+   ```
+
+3. Confirm the monitor tools are available.
+
+   ```
+   hermes mcp test vtx-monitor
+   ```
+
+4. Install the fleet supervisor skill.
+
+   ```
+   hermes skills install https://raw.githubusercontent.com/DataDoesYou/VTX-Insights/main/plugins/vtx-insights/skills/vtx-fleet-supervisor/SKILL.md
+   ```
+
+5. Schedule the check. Reports are saved under ~/.hermes/cron/output; use --deliver telegram, slack, email, or another connected channel to receive them as messages.
+
+   ```
+   hermes cron create "every 4h" "Use the vtx-fleet-supervisor skill with the vtx-monitor server to check my VTX bots and tell me only what needs my attention." --name vtx-fleet-check --deliver local
+   ```
+
+6. Keep the Hermes gateway running; scheduled jobs fire only while it runs (hermes gateway install runs it as a service). Start it without unrelated model-provider keys in its environment, because Hermes saves any key it finds and may use a paid provider.
+
+   ```
+   hermes gateway run
+   ```
 
 ## Use
 
