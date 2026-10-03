@@ -35,8 +35,8 @@ still choose the windows.
    aggregate_metrics` over the entire requested interval and retain every
    prompt, model, input-definition, symbol, deployment, release, and
    runtime-code candidate boundary. Another owner's bot shows everything
-   except credentials, auth, emails, and inference-host identities; those are
-   unavailable and must never be inferred.
+   except credentials, auth, and emails; those are unavailable and must never
+   be inferred.
 3. For prompt consumption or prompt-performance attribution, complete one
    `decision.context result_view=prompt_lineage` read over the exact interval
    with `lineage_projection=generation_summary` and `execution_linkage=all`

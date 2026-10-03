@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
-  "package_version": "2026.10.5",
-  "content_fingerprint": "e8573deffc888ddcfa6a6c8ae17c508954802255fd801354d2bd0bfc2039c58d",
+  "package_version": "2026.10.6",
+  "content_fingerprint": "0bf774cbb427e3d51118b03d6c48493144ec7650d996de6d690fd853641e4cd9",
   "server_contract": {
     "minimum": 1,
     "maximum": 1
