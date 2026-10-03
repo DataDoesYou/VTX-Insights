@@ -42,6 +42,9 @@ diagnosing from aggregate PnL alone.
   performance verdict. If your host installed only this file, read them at
   https://raw.githubusercontent.com/DataDoesYou/VTX-Insights/main/plugins/vtx-insights/skills/vtx-bot-trade-chain-analysis/references/analysis-contracts.md
   and https://raw.githubusercontent.com/DataDoesYou/VTX-Insights/main/plugins/vtx-insights/skills/vtx-bot-trade-chain-analysis/references/evidence-contracts.md.
+- A direct call that returns `delivery=artifact` has already completed that
+  exact request. Consume its handle; never start the same request again through
+  `analysis.start`.
 - `decision.context` defaults to `execution_linkage=linked`, which silently
   drops HOLDs and every other decision without an execution record. Pass `execution_linkage=all` on every
   population-wide view; narrow it only for a literal executed/blocked claim, and
@@ -176,18 +179,14 @@ Before any cross-profile or before/after performance attribution, apply the
 not waive that check, and missing evidence does not authorize new tooling or
 production changes.
 
-Read complete change provenance first when recent configuration changes matter.
-Identify when each material change became effective and do not judge the new
-generation using earlier results.
+For trades since settings, configuration, or prompts changed, follow the
+**Settings-Change Trade Review Route** below instead of the provenance-first
+and matrix steps in this section. It starts from one `trade_chain.since_change`
+job, and its boundary replaces any matrix-chosen start.
 
-For a literal “since configuration or prompt change” review, start one
-`trade_chain.since_change` request through `analysis.start` with the exact
-selection and cutoff, then consume its one immutable body-free artifact. Use its
-exact retained boundary, effective-consumption prompt lineage, compact campaign
-economics, provider reliability, coverage, and conservation as the core
-evidence. Make separate calls below only for a named unresolved claim. If any
-selected profile lacks an exact boundary, preserve the typed missingness and do
-not infer an adaptive fallback.
+Otherwise, read complete change provenance first when recent configuration
+changes matter. Identify when each material change became effective and do not
+judge the new generation using earlier results.
 
 Start `positions.episodes` with `result_view=window_matrix` and
 `matrix_projection=compact` exactly once through `analysis.start` for the full
@@ -309,25 +308,45 @@ cutoff-safe execution outcome.
 
 ### Settings-Change Trade Review Route
 
-When the user asks to review trades since settings changed:
+When the user asks to review trades since settings, configuration, or prompts
+changed:
 
 1. Read current settings with `settings.read view=current_bot_settings` and
-   `result_view=enabled_only`, then
-   complete `runtime.provenance change_causality aggregate_metrics`—through
-   `analysis.start` for a long or all-history read—and call the one
-   full-selection `window_matrix` with `matrix_projection=compact`.
-2. Use the matrix's returned adaptive-window start as the exact `start` for
-   interval-scoped `comparison.read view=summary`, `policy.evaluate summary`,
-   `decision.context exposure_metrics`, `position.excursions summary`, and any
-   compact decision context. Replay the same selection and cutoff. The
-   comparison summary supplies the marked-equity verdict.
-3. Complete those compact reads before starting ledger or reasoning expansion.
-4. Start an `event_detail` ledger, scoped as **Reconstruct Complete Chains**
+   `result_view=enabled_only`.
+2. Start one `trade_chain.since_change` request through `analysis.start` with
+   the exact selection and cutoff, and consume its one immutable body-free
+   artifact. Prompts are settings, so keep the default
+   `change_kind=configuration_or_prompt` unless the user names only
+   configuration or only prompt changes. Leave `scope` at its default, and do
+   not set `changed_paths` or `discovery_start` unless the user narrows the
+   change. Its exact
+   retained boundary, effective-consumption prompt lineage, compact campaign
+   economics, provider reliability, coverage, and conservation are the core
+   evidence. If any selected profile lacks an exact boundary, preserve the
+   typed missingness and do not infer an adaptive fallback.
+3. Read `comparison.read view=summary` with the same selection and cutoff and
+   the artifact's exact `shared_start` as `start`. It supplies the
+   marked-equity verdict that leads the answer, which the since-change
+   artifact does not carry.
+4. Make any other read only for a named unresolved claim, with the same
+   selection, cutoff, and `shared_start` as `start` (as `adaptive_start` for
+   the matrix): `runtime.provenance change_causality aggregate_metrics` through
+   `analysis.start`, the one full-selection `window_matrix` with
+   `matrix_projection=compact`, `policy.evaluate summary`,
+   `decision.context exposure_metrics`, `position.excursions summary`, or
+   compact decision context. For open positions at the cutoff, read compact
+   `decision.context context_rows` with `execution_linkage=all`,
+   `content_view=audit`, and both include flags false. When the server says a
+   read must start through `analysis.start`, rerun that exact request there and
+   consume its artifact.
+5. Complete the comparison and any other compact reads before starting ledger
+   or reasoning expansion.
+6. Start an `event_detail` ledger, scoped as **Reconstruct Complete Chains**
    describes, only when the compact reads leave a named row-level claim
    unresolved, such as exact event
    order across the change boundary or an inherited position, or when the user
    or host explicitly requests the complete ledger.
-5. Wait for an exact user-supplied counterfactual scenario or threshold
+7. Wait for an exact user-supplied counterfactual scenario or threshold
    follow-up before calling `policy.replay`; never invent default replay inputs.
 
 When a same-thread follow-up explicitly supplies a warning/critical threshold
@@ -338,8 +357,8 @@ when the pair matches current settings: replay evaluates deterministic
 enforcement, not configuration novelty. Do not infer a threshold pair from
 settings or replay a policy/window-only question.
 
-For this route, make one synchronous `decision.context exposure_metrics`
-attempt with `execution_linkage=all`. If it times out before returning an
+When this route needs exposure, make one synchronous
+`decision.context exposure_metrics` attempt with `execution_linkage=all`. If it times out before returning an
 artifact, recover that same exact request once through `analysis.start`; this
 is one logical exposure request, not an executed-then-all expansion. That
 general expansion rule applies only to `context_rows`, and a completed exposure
@@ -411,11 +430,14 @@ When the user asks whether one campaign gave back gains or exited late:
 1. Resolve the exact requested profiles, campaign symbol, campaign start, and
    one cutoff from the user, host, existing thread, or retained matrix. Do not
    rediscover an exact profile selection that is already established.
-2. Complete one full-selection `window_matrix` with `matrix_projection=compact`
-   and `adaptive_start` omitted,
-   then call direct `position.excursions summary` and direct
-   `execution.quality summary` with `decision_target_settings=omit` for the
-   exact campaign start, symbol, selection, and cutoff.
+2. Complete one full-selection `window_matrix` with `matrix_projection=compact`,
+   `adaptive_start` omitted, and the campaign interval as one `custom_intervals`
+   window (`window_matrix` takes no top-level `start`), then call direct
+   `position.excursions summary` and direct `execution.quality summary` with
+   `decision_target_settings=omit` for the exact campaign symbol and
+   selection, `start` at the campaign start, and `end` at the pinned cutoff,
+   not the campaign's last fill: the summaries need the history through the
+   cutoff to account for the whole campaign.
 3. Complete the matrix and both summaries before starting any durable
    expansion. Then retrieve only what the claim still needs, or what the user
    or host explicitly requests, and consume each completely: the exact
@@ -593,6 +615,10 @@ For every `artifact.read`, branch on the returned `encoding`: encode `text` as
 UTF-8 bytes when `encoding=utf-8`, or decode `base64_data` when
 `encoding=base64`. Verify raw `byte_count` and `content_hash` before
 acknowledging the chunk.
+
+If your host runs tool calls inside a fresh code sandbox per step, follow
+**Code-Sandbox Hosts** in [Evidence contracts](references/evidence-contracts.md)
+and its dependency-free verification helper.
 
 Trace each material campaign without gaps:
 

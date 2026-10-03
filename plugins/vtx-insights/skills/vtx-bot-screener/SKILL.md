@@ -80,8 +80,10 @@ For slow reads, use `analysis.start` and poll the same `analysis.status` handle.
 For complete artifact retrieval, read `artifact.manifest`, consume every chunk,
 verify `byte_count` and `content_hash`, and acknowledge through `artifact.resume`.
 Decode `text` as UTF-8 when `encoding=utf-8` or `base64_data` when
-`encoding=base64`. Do not silently shrink the candidate population after a
-transport limit.
+`encoding=base64`. If your host runs tool calls inside a fresh code sandbox per
+step, follow **Code-Sandbox Hosts** in the bundled
+`$vtx-bot-trade-chain-analysis` skill's `references/evidence-contracts.md`. Do
+not silently shrink the candidate population after a transport limit.
 
 ## Add historical evidence for fleet recommendations
 
