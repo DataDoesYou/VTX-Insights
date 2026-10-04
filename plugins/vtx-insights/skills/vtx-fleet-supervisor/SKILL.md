@@ -47,12 +47,20 @@ Run these steps once per check. Reuse the first results instead of rediscovering
    `dataset="open_orders"` for each owned bot and report resting orders that
    look stale, orphaned (no matching position or running bot), or unexpected
    for the bot, with their age, side, size, and price.
-4. **Results.** Call `analytics.query` with `dataset="performance"` for the
-   window to rank the biggest winners and losers, and `position.excursions` with
+4. **Results.** Rank the biggest winners and losers by account equity change
+   over the window, because open positions are part of a bot's result: read
+   `analytics.query` `dataset="equity_history"` for the window and take each
+   bot's current equity from the `account.snapshot` above. Equity history does
+   not net out deposits or withdrawals, so this ranking is provisional: for any
+   bot whose change could be a transfer, or that would rank among the biggest
+   winners or losers, check `comparison.read` `view=summary` for that bot and
+   window (`finance.net_cashflows_usd`, `finance.marked_pnl_usd`) before ranking
+   it, and label any ranking whose cashflows stay unverified as provisional. Use
+   `dataset="performance"` (closed fills only) to split realized from open
+   results, never to rank on its own. Call `position.excursions` with
    `result_view="summary"` for the same window to find profit giveback (peak
-   unrealized profit versus what was kept) and the deepest adverse excursion.
-   Use `analytics.query` `dataset="equity_history"` when a bot's or account's
-   peak-to-now drop matters.
+   unrealized profit versus what was kept) and the deepest adverse excursion,
+   and use the equity history's peak-to-now drop for account-level giveback.
 5. **Odd trades.** When results or excursions point at a specific bot, read its
    recent trades or `decisions.history` for that window to explain what looks
    unusual (size, direction flips, churn, entries against its own reasoning).
