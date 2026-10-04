@@ -98,7 +98,9 @@ Do not assume `scope=profile` selects a named profile. A same-thread follow-up
 inherits only the exact selection, cutoff, interval, symbols, and scenario
 values already established; never infer new thresholds or broaden the
 population, reuse completed evidence, and run only the missing claim-specific
-view.
+view. A follow-up about current state (now, still, live, or an open
+position) moves the cutoff to now: read `account.snapshot` again and label
+earlier results with their cutoff instead of presenting them as current.
 
 Every `positions.episodes` `window_matrix` or `event_detail` request is a
 deterministic known-large read. Start it directly through `analysis.start`
@@ -120,7 +122,10 @@ views distinct:
   same selection, `start`, and `end`: each profile's `finance.marked_pnl_usd` is
   end minus start equity minus net cashflows, and `finance.return_pct` divides it
   by account capital; `performance_status` and `unavailable_reason` say when
-  either is unavailable. Reconcile realized PnL plus ending minus starting
+  either is unavailable. When it is unavailable because transfer history is
+  incomplete, use end minus start equity (live `account.snapshot` equity when
+  the window ends now), assuming no deposits, withdrawals, or transfers in the
+  window. Reconcile realized PnL plus ending minus starting
   unrealized PnL, fees, funding, and other material account components on the
   same equity boundary. Do not subtract costs already included in a source.
 - **Open at cutoff:** enumerate every selected profile's open positions,
@@ -163,15 +168,19 @@ ledger coverage supports marked returns; fill/funding coverage separately
 qualifies those components. Coverage certification does not establish correct
 cashflow classification.
 
-For incomplete cashflows, use the bundled `vtx-wallet-cashflow-check` skill
-only from the user's local machine/network, never the VPS or a server refresh. Retain original
+When transfer history is incomplete, assume the selected accounts had no
+deposits, withdrawals, or transfers in the window and judge, compare, and rank
+them on their equity change. State that assumption with the result and ask the
+user to report any transfer so it can be accounted for. Use the bundled
+`vtx-wallet-cashflow-check` skill only when the user reports a transfer or asks
+to verify cashflows, and only from the user's local machine/network, never the
+VPS or a server refresh. Retain original
 cutoff-visible readiness and label later-acquired historical recovery separately
 with its acquisition time, full-interval coverage, and wallet/pool scope. There
 is no local-data import step in this route. Normalize deposits and sends by
 sender/recipient and equity boundary; internal transfers are not new wallet
-capital. Missing flows are not zero unless the user explicitly authorizes a
-provisional assumption. Missing ROI does not erase available behavior evidence
-or justify a model ranking from dollar PnL alone.
+capital. A reported transfer replaces the no-transfer assumption for that
+account and window.
 
 Before any cross-profile or before/after performance attribution, apply the
 **Activity And Comparability Contract** in

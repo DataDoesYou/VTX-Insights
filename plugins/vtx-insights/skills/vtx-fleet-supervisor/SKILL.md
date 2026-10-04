@@ -51,11 +51,12 @@ Run these steps once per check. Reuse the first results instead of rediscovering
    over the window, because open positions are part of a bot's result: read
    `analytics.query` `dataset="equity_history"` for the window and take each
    bot's current equity from the `account.snapshot` above. Equity history does
-   not net out deposits or withdrawals, so this ranking is provisional: for any
-   bot whose change could be a transfer, or that would rank among the biggest
-   winners or losers, check `comparison.read` `view=summary` for that bot and
-   window (`finance.net_cashflows_usd`, `finance.marked_pnl_usd`) before ranking
-   it, and label any ranking whose cashflows stay unverified as provisional. Use
+   not net out deposits or withdrawals. For bots that would rank among the
+   biggest winners or losers, read `comparison.read` `view=summary` for the
+   window and use `finance.marked_pnl_usd`, which nets recorded transfers, when
+   it is available. Otherwise rank on the equity change assuming no deposits,
+   withdrawals, or transfers in the window, say so in the report, and ask the
+   owner to report any transfer so that bot's result can be corrected. Use
    `dataset="performance"` (closed fills only) to split realized from open
    results, never to rank on its own. Call `position.excursions` with
    `result_view="summary"` for the same window to find profit giveback (peak

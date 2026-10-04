@@ -19,7 +19,13 @@ tradability with precomputed leaderboard ROI to propose symbol allocations.
 It preserves venue restrictions, open positions, and the user's distribution
 constraints; screening does not change bot settings or place trades.
 
-`vtx-wallet-cashflow-check` checks one explicit wallet and time window using the
+When a bot's transfer history is not yet verified, the analysis skills measure
+its result as the change in account equity, assume no deposits, withdrawals, or
+transfers in the window, and say so with the result. Tell the agent about any
+transfer and it will account for it.
+
+`vtx-wallet-cashflow-check` is for when you report a transfer or want one
+verified. It checks one explicit wallet and time window using the
 official Hyperliquid explorer and bounded local cashflow reads. It separates
 external cashflows from internal account transfers, preserves coverage gaps,
 and never infers zero cashflows
@@ -80,7 +86,7 @@ Start another new session and reauthenticate if prompted. Codex desktop users
 can disable the plugin from Settings > Plugins. The manual MCP fallback is in
 `manual/codex.config.toml`.
 
-After updating, confirm the installed manifest reports only `2026.10.8` before
+After updating, confirm the installed manifest reports only `2026.10.9` before
 starting the new session.
 
 ## Claude Code
@@ -95,7 +101,7 @@ The one-time version-format migration sorts below the retired packed-date
 version, so an ordinary Claude update can leave the old package installed. Run
 `claude plugin marketplace update vtx-insights`, then
 `claude plugin uninstall vtx-insights@vtx-insights`, then
-`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.10.8`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
+`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.10.9`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
 `vtx-insights@vtx-insights` for later lifecycle changes. The manual fallback is
 in `manual/claude.mcp.json`.
 

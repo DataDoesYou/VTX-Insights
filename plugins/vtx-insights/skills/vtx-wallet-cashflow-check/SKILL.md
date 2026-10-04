@@ -1,12 +1,12 @@
 ---
 name: vtx-wallet-cashflow-check
-description: Check a selected VTX bot wallet's cashflows, fills, and capital-based returns using local Hyperliquid reads and the official explorer. Use to explain equity changes or close ROI evidence gaps; never originate exchange requests from the VTX VPS.
+description: Check a selected VTX bot wallet's cashflows, fills, and capital-based returns using local Hyperliquid reads and the official explorer. Use when the user reports a transfer or asks to verify an equity change; the analysis skills otherwise assume no transfers. Never originate exchange requests from the VTX VPS.
 ---
 
 # VTX Wallet Cashflow Check
 
-Use this for a requested wallet cashflow or return check, especially when retained
-Insights data has an uncovered interval. For a requested performance calculation
+Use this when the user reports a transfer or asks for a wallet cashflow or
+return check. Without either, the analysis skills assume no transfers. For a requested performance calculation
 or chart, also read [Return calculations](references/returns.md); if your host
 installed only this file, read it at
 https://raw.githubusercontent.com/DataDoesYou/VTX-Insights/main/plugins/vtx-insights/skills/vtx-wallet-cashflow-check/references/returns.md.
