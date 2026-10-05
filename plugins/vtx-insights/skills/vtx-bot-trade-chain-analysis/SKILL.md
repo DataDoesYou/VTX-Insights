@@ -574,6 +574,13 @@ new evidence from duplicate evidence, thesis relabeling, or unsupported adds.
 Preserve profitable trend scaling while testing whether concentration, loss
 velocity, or re-entry controls remove a measured loss cluster.
 
+Measure trading cost with each bot's turnover and fee drag over the window, as
+defined under **Claim Labels**, against the gross result it earned. Take
+traded notional from the price times size of the `event_detail` ledger's fill
+rows and starting equity from the performance already established for this
+window. Do not add calls to this route for them; when either is not in
+evidence, report fee drag and turnover as unavailable.
+
 ## 3. Reconstruct Complete Chains
 
 The platform aggregate route also skips this generic section unless a separate
@@ -817,6 +824,12 @@ or generation is too new.
   result also needs its marked unrealized component.
 - When reporting a fee share, name whether its denominator is realized PnL
   before fees, net PnL after fees, or notional. Never label net loss as gross.
+- Compare fees across bots or periods as fee drag (fees divided by starting
+  equity, in basis points) together with turnover (traded notional divided by
+  starting equity), because dollar fees are not comparable across account
+  sizes. Report fees as a share of gross PnL only when gross PnL is positive.
+  A fee rate per notional that departs from the bot's usual rate is an
+  execution or fee-tier question, not overtrading.
 - Attribute observed blocks to their exact retained status and reason category.
   A block count shared across policy rows is not proof that the named policy
   caused those blocks.

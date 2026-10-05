@@ -1,6 +1,6 @@
 ---
 name: vtx-fleet-supervisor
-description: Supervise the user's VTX bot fleet on demand or on a schedule with read-only VTX Insights evidence. Use when the user asks an agent to watch, monitor, check on, or supervise their bots, or schedules a recurring fleet check, to surface stopped or offline bots, Hyperliquid and model-provider errors, biggest winners and losers, large gains or losses, profit giveback, deep unrealized losses, stale open orders, and odd trades. Never changes settings, controls bots, or trades.
+description: Supervise the user's VTX bot fleet on demand or on a schedule with read-only VTX Insights evidence. Use when the user asks an agent to watch, monitor, check on, or supervise their bots, or schedules a recurring fleet check, to surface stopped or offline bots, Hyperliquid and model-provider errors, biggest winners and losers, large gains or losses, profit giveback, fee drag and turnover, deep unrealized losses, stale open orders, and odd trades. Never changes settings, controls bots, or trades.
 ---
 
 # VTX Fleet Supervisor
@@ -62,6 +62,14 @@ Run these steps once per check. Reuse the first results instead of rediscovering
    `result_view="summary"` for the same window to find profit giveback (peak
    unrealized profit versus what was kept) and the deepest adverse excursion,
    and use the equity history's peak-to-now drop for account-level giveback.
+   Compute each bot's fee drag and turnover for the window, as
+   `vtx-bot-trade-chain-analysis` defines them, from the `fees_usd` and
+   `traded_notional_usd` of `dataset="performance"` and the window's starting
+   equity. For each bot's baseline, read `dataset="performance"` and
+   `dataset="equity_history"` for the preceding stretch of equal length and
+   compute its turnover the same way. Flag a bot whose turnover jumps against
+   that baseline or, when its gross PnL before fees is positive, whose fees
+   take a large share of it.
 5. **Odd trades.** When results or excursions point at a specific bot, read its
    recent trades or `decisions.history` for that window to explain what looks
    unusual (size, direction flips, churn, entries against its own reasoning).
@@ -87,7 +95,8 @@ and the time of the check in the user's timezone: read it once with
 
 - Lead with what needs attention, most urgent first: stopped or offline bots
   that should be running, active errors, deep unrealized losses, stale or
-  orphaned open orders, then giveback, losers, winners, and odd trades.
+  orphaned open orders, then giveback, losers, winners, fee drag or turnover
+  flags, and odd trades.
 - Name each profile by handle with the exact numbers behind every claim.
 - When nothing needs attention, reply with exactly one all-clear line that names
   the window and the number of bots checked, plus one line per unavailable read

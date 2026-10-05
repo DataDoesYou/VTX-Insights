@@ -37,8 +37,8 @@ does not trade or poll.
 `vtx-fleet-supervisor` is a read-only fleet check for on-demand or scheduled
 runs. It reports bots that should be running but are not, closed Client Mode
 hosts, Hyperliquid and model-provider errors, deep unrealized losses, stale or
-orphaned open orders, profit giveback, the biggest winners and losers, and odd
-trades, and stays to one all-clear line when nothing needs attention. It needs
+orphaned open orders, profit giveback, the biggest winners and losers, fee
+drag and turnover, and odd trades, and stays to one all-clear line when nothing needs attention. It needs
 only `insights:read` and never changes settings, controls bots, or trades.
 
 Try: `Use $vtx-bot-screener to screen native Hyperliquid symbols, exclude xyz,
@@ -86,7 +86,7 @@ Start another new session and reauthenticate if prompted. Codex desktop users
 can disable the plugin from Settings > Plugins. The manual MCP fallback is in
 `manual/codex.config.toml`.
 
-After updating, confirm the installed manifest reports only `2026.10.9` before
+After updating, confirm the installed manifest reports only `2026.10.10` before
 starting the new session.
 
 ## Claude Code
@@ -101,7 +101,7 @@ The one-time version-format migration sorts below the retired packed-date
 version, so an ordinary Claude update can leave the old package installed. Run
 `claude plugin marketplace update vtx-insights`, then
 `claude plugin uninstall vtx-insights@vtx-insights`, then
-`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.10.9`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
+`claude plugin install vtx-insights@vtx-insights`. Confirm the installed manifest reports only `2026.10.10`, run `/reload-plugins`, and start a fresh session. Use `claude plugin disable`, `enable`, or `uninstall` with
 `vtx-insights@vtx-insights` for later lifecycle changes. The manual fallback is
 in `manual/claude.mcp.json`.
 
