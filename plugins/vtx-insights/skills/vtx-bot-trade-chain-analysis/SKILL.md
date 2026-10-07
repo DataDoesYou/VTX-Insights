@@ -123,9 +123,10 @@ views distinct:
   end minus start equity minus net cashflows, and `finance.return_pct` divides it
   by account capital; `performance_status` and `unavailable_reason` say when
   either is unavailable. When it is unavailable because transfer history is
-  incomplete, use end minus start equity (live `account.snapshot` equity when
-  the window ends now), assuming no deposits, withdrawals, or transfers in the
-  window. Reconcile realized PnL plus ending minus starting
+  incomplete, `performance_status` is `equity_change_cashflows_unverified` and
+  `finance.equity_change_usd` gives end minus start equity (use live
+  `account.snapshot` equity when the window ends now); it holds only assuming no
+  deposits, withdrawals, or transfers in the window, so state that assumption. Reconcile realized PnL plus ending minus starting
   unrealized PnL, fees, funding, and other material account components on the
   same equity boundary. Do not subtract costs already included in a source.
 - **Open at cutoff:** enumerate every selected profile's open positions,
@@ -431,6 +432,25 @@ Compare losing campaigns with profitable counterexamples and explicit
 zero-event profiles, from compact campaign economics or the ledger when one was
 needed, before calling the behavior systemic. Do not add
 runtime provenance unless the literal question asks for change attribution.
+
+### Run And Drawdown Attribution Route
+
+When the user asks which periods went well or badly and why (a settings or
+prompt change, a market regime change, a VTX or model outage, guidance in the
+prompt, or how positions were closed), for one bot, an account, or the
+platform:
+
+1. Start `period.attribution` through `analysis.start` with the exact
+   selection, `start`, and cutoff. It splits equity into runs and drawdowns and
+   overlays settings and shared-prompt changes, balance flows, traded symbols'
+   moves, Hyperliquid read degradation, closing PnL by exit type and by guidance
+   present in the deciding prompt, and model, runtime, and inference failures.
+2. Read `aggregate.periods` first, then each profile's `periods` for the
+   periods that change the answer. `likely_causes` ranks correlation only;
+   confirm a named cause with the route that owns it (settings change, exit
+   timing, execution quality) before stating it as the reason.
+3. Treat `profile_days_unavailable`, `status: unavailable`, and
+   `population_complete: false` as missing evidence, never as zero.
 
 ### Gain-Giveback And Exit-Timing Route
 
