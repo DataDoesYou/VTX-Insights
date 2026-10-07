@@ -30,6 +30,10 @@ cutoff or verified status; no production import is part of this workflow.
    relevant named DEX explicitly when needed. A current state is context, not a
    historical end anchor. Reuse retained start/end equity snapshots for a past
    comparison and preserve their timestamp offsets and equity source contracts.
+   For an end anchor at now, measure the same pools as the retained anchors:
+   sum the account values of the DEXes in the profile's `equity_venue_scope`
+   (`account.snapshot` `venue_scoped_equity_usd` is that sum), never
+   `account_value`, which is usually the whole account.
 5. `portfolio`: inspect available periods and use `perpAllTime.pnlHistory` for
    the requested all-time curve when suitable. Retain `accountValueHistory` for
    capital/scope reconciliation, but do not plot its raw change as trading gains:

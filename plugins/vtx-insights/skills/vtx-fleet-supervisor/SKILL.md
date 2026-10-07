@@ -50,7 +50,12 @@ Run these steps once per check. Reuse the first results instead of rediscovering
 4. **Results.** Rank the biggest winners and losers by account equity change
    over the window, because open positions are part of a bot's result: read
    `analytics.query` `dataset="equity_history"` for the window and take each
-   bot's current equity from the `account.snapshot` above. Equity history does
+   bot's current equity from the `account.snapshot` above as
+   `venue_scoped_equity_usd`: it measures the same equity venues as the history
+   (`equity_venue_scope`), while `account_value` is usually the whole account,
+   including idle balances on DEXes the bot does not trade
+   (`account_value_venue_scope` names what it measured). When it is null,
+   report that bot's current equity as unavailable. Equity history does
    not net out deposits or withdrawals. For bots that would rank among the
    biggest winners or losers, read `comparison.read` `view=summary` for the
    window and use `finance.marked_pnl_usd`, which nets recorded transfers, when

@@ -132,7 +132,10 @@ Distinguish:
 Internal transfers net to zero only when **both pools are inside the equity
 measure**. A transfer into main perpetuals can be a capital inflow for a
 main-perps-only return even though no money entered the wallet. Get the actual
-equity source contract from retained Insights evidence before adjusting ROI.
+equity source contract from retained Insights evidence before adjusting ROI:
+VTX equity history measures the profile's equity venues, named by
+`equity_venue_scope` on its rows and in `account.snapshot`, where `default`
+is main perpetuals and `perp_dex_account_values` lists every pool.
 Do not add both legs of an internal transfer to external cashflow totals.
 
 ## Coverage and result

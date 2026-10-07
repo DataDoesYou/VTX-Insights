@@ -124,8 +124,10 @@ views distinct:
   by account capital; `performance_status` and `unavailable_reason` say when
   either is unavailable. When it is unavailable because transfer history is
   incomplete, `performance_status` is `equity_change_cashflows_unverified` and
-  `finance.equity_change_usd` gives end minus start equity (use live
-  `account.snapshot` equity when the window ends now); it holds only assuming no
+  `finance.equity_change_usd` gives end minus start equity (when the window
+  ends now, use live `account.snapshot` `venue_scoped_equity_usd`, the same
+  venue scope as the history, never `account_value`, which is usually the
+  whole account); it holds only assuming no
   deposits, withdrawals, or transfers in the window, so state that assumption. Reconcile realized PnL plus ending minus starting
   unrealized PnL, fees, funding, and other material account components on the
   same equity boundary. Do not subtract costs already included in a source.
