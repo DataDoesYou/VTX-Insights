@@ -33,7 +33,7 @@ cutoff or verified status; no production import is part of this workflow.
    For an end anchor at now, measure the same pools as the retained anchors:
    sum the account values of the DEXes in the profile's `equity_venue_scope`
    (`account.snapshot` `venue_scoped_equity_usd` is that sum), never
-   `account_value`, which is usually the whole account.
+   `account_value`, which can also measure other DEXes.
 5. `portfolio`: inspect available periods and use `perpAllTime.pnlHistory` for
    the requested all-time curve when suitable. Retain `accountValueHistory` for
    capital/scope reconciliation, but do not plot its raw change as trading gains:

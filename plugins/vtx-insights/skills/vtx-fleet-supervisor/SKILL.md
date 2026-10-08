@@ -52,9 +52,9 @@ Run these steps once per check. Reuse the first results instead of rediscovering
    `analytics.query` `dataset="equity_history"` for the window and take each
    bot's current equity from the `account.snapshot` above as
    `venue_scoped_equity_usd`: it measures the same equity venues as the history
-   (`equity_venue_scope`), while `account_value` is usually the whole account,
-   including idle balances on DEXes the bot does not trade
-   (`account_value_venue_scope` names what it measured). When it is null,
+   (`equity_venue_scope`), while `account_value` can also include idle
+   balances on DEXes the bot does not trade (`account_value_venue_scope` names
+   what it measured). When it is null,
    report that bot's current equity as unavailable. Equity history does
    not net out deposits or withdrawals. For bots that would rank among the
    biggest winners or losers, read `comparison.read` `view=summary` for the
