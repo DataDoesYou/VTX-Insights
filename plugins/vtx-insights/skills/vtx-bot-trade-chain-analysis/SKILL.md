@@ -138,7 +138,8 @@ views distinct:
   retained decision-time position and account state at or before the cutoff
   from `decision.context`; use `account.snapshot` only when the cutoff is now,
   because it reports current live state. State freshness and missingness;
-  unavailable is not flat. The UI's margin ROE is not account ROI.
+  unavailable is not flat. The Trade page's Positions ROI is unrealized PnL
+  over the bot's venue equity without that PnL, not margin ROE.
 - **Campaign since entry:** for material winning and losing open positions,
   trace entry, adds, reductions, and HOLDs through the cutoff. Include realized
   reductions and remaining unrealized PnL, with covered costs, without requiring
