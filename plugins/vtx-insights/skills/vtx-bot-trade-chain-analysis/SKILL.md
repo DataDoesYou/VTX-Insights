@@ -779,13 +779,14 @@ excluded from exact campaign economics. Filter realized-PnL claims on
 `economics_status` and price-path claims on `path_status`; `status` is their
 union, so a market-history gap must not drop a final realized outcome.
 
-Keep external historical news and bot-seen news separate. Whenever exogenous
+Keep external news and bot-seen news separate. VTX serves no news to agents:
+for any news, current or historical, search the web yourself. Whenever exogenous
 historical news is material, independently research timestamped primary-source
-external web evidence for market context. VTX `{news}`, Benzinga, and
-`market.news` evidence are only bot-seen or prompt-inclusion evidence, never the
-primary historical-news route. Only retained `decision.context` effective-input
-evidence can prove what entered a historical bot prompt; `market.news` is only
-the bounded current cache tail. Use `market.calendar` only within its returned
+external web evidence for market context. VTX news variables (`{news_telegram}`,
+`{news_benzinga}`, and the retired `{news}`) are only bot-seen or
+prompt-inclusion evidence, never a news source for your own analysis. Only
+retained `decision.context` effective-input evidence can prove what entered a
+historical bot prompt. Use `market.calendar` only within its returned
 cached coverage, and keep event, publication, ingestion, decision, and
 prompt-inclusion times distinct. Missing retention is not confirmed absence,
 and external relevance never proves prompt inclusion. For market regime claims, follow **Market
