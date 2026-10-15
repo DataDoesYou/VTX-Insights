@@ -46,7 +46,9 @@ Run these steps once per check. Reuse the first results instead of rediscovering
    looks unexpected for the bot. Then read `trade.read` with
    `dataset="open_orders"` for each owned bot and report resting orders that
    look stale, orphaned (no matching position or running bot), or unexpected
-   for the bot, with their age, side, size, and price.
+   for the bot, with their age, side, size, and price. A `status` of
+   `app_required` is not an empty order book: report that the user's VTX app
+   must be open to read those orders.
 4. **Results.** Rank the biggest winners and losers by account equity change
    over the window, because open positions are part of a bot's result: read
    `analytics.query` `dataset="equity_history"` for the window and take each

@@ -210,8 +210,11 @@ than silently sampling or using phrase matching or deterministic answer grading.
   intrabar ordering; state residual
   ambiguity.
 - When `position.excursions` returns `summary.timeframe_recommendation`, the
-  canonical resolution is past provider retention for those rows. Rerun only
-  its `affected_window` with `recommended_timeframe` as the explicit
+  canonical resolution's candles are unavailable for those rows: VTX did not
+  store them and the owner's VTX app could not read them
+  (`market_history_<reason_code>`). For `market_history_app_required`, ask the
+  user to open VTX in a browser or the desktop app and rerun. Otherwise rerun
+  only its `affected_window` with `recommended_timeframe` as the explicit
   `timeframe` and `analysis_scope=request_window`, keep the other rows from the
   original run, and label the coarser resolution.
 

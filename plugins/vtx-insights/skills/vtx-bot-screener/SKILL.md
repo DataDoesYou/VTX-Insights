@@ -69,6 +69,9 @@ Check the data inside each prompt before scoring:
   not establish freshness or continuity. Treat stale, incomplete, failed, or
   unavailable inputs that prevent a sound evaluation as unscored with a reason,
   not as zero or evidence of poor symbol performance.
+- `context_status: app_required` means the candles VTX has not stored can be
+  read only by the user's open VTX app: ask the user to open VTX in a browser or
+  the desktop app, then request that context again. Never score it meanwhile.
 
 Pass the complete candidate list, effective pass count, and actual evaluations to
 `screener.rank`. Preserve individual reasons, mean, sample spread, and missing
