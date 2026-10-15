@@ -125,7 +125,7 @@ views distinct:
   either is unavailable. When it is unavailable because transfer history is
   incomplete, `performance_status` is `equity_change_cashflows_unverified` and
   `finance.equity_change_usd` gives end minus start equity (when the window
-  ends now, use live `account.snapshot` `venue_scoped_equity_usd`, the same
+  ends now, use `account.snapshot` `venue_scoped_equity_usd`, the same
   venue scope as the history, never `account_value`, which can also
   measure other DEXes); it holds only assuming no
   deposits, withdrawals, or transfers in the window, so state that assumption. Reconcile realized PnL plus ending minus starting
@@ -137,7 +137,7 @@ views distinct:
   PnL, account equity, and exposure/equity where available. Use the latest
   retained decision-time position and account state at or before the cutoff
   from `decision.context`; use `account.snapshot` only when the cutoff is now,
-  because it reports current live state. State freshness and missingness;
+  because it reports each bot's latest reported state, as of its `observed_at`. State freshness and missingness;
   unavailable is not flat. The Trade page's Positions ROI is unrealized PnL
   over the bot's venue equity without that PnL, not margin ROE.
 - **Campaign since entry:** for material winning and losing open positions,
@@ -712,8 +712,8 @@ Inspect:
 
 Use `decision.context result_view=exposure_metrics` with
 `execution_linkage=all` for complete max-exposure and retained trading-limit
-arithmetic. Use a live `account.snapshot` for current
-positions; unavailable does not mean flat.
+arithmetic. Use `account.snapshot` for current positions, as of its
+`observed_at`; unavailable does not mean flat.
 
 Retrieve market history only for an explicit candle or market-path question, or
 when excursion evidence leaves material path ambiguity. Do not call it merely
