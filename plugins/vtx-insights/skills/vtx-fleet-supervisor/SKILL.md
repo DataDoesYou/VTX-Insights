@@ -48,7 +48,10 @@ Run these steps once per check. Reuse the first results instead of rediscovering
    look stale, orphaned (no matching position or running bot), or unexpected
    for the bot, with their age, side, size, and price. A `status` of
    `app_required` is not an empty order book: report that the user's VTX app
-   must be open to read those orders.
+   must be open to read those orders. An `unavailable_reason` of
+   `device_read_busy` is not an empty order book either: the user's VTX app is
+   open but had not finished the read in time, so read that bot's open orders
+   again shortly, and report them as not read if it is still busy.
 4. **Results.** Rank the biggest winners and losers by account equity change
    over the window, because open positions are part of a bot's result: read
    `analytics.query` `dataset="equity_history"` for the window and take each

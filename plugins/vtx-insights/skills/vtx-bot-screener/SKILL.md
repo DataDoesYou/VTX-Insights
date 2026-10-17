@@ -72,6 +72,10 @@ Check the data inside each prompt before scoring:
 - `context_status: app_required` means the candles VTX has not stored can be
   read only by the user's open VTX app: ask the user to open VTX in a browser or
   the desktop app, then request that context again. Never score it meanwhile.
+- `context_status: unavailable` with `device_read_busy` in the unavailable
+  candles (and a warning) means the user's VTX app is open but had not finished
+  reading them in time: request that same context again shortly instead of
+  asking the user to open VTX. Never score it meanwhile.
 
 Pass the complete candidate list, effective pass count, and actual evaluations to
 `screener.rank`. Preserve individual reasons, mean, sample spread, and missing

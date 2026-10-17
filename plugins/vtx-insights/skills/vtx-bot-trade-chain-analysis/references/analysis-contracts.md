@@ -213,8 +213,10 @@ than silently sampling or using phrase matching or deterministic answer grading.
   canonical resolution's candles are unavailable for those rows: VTX did not
   store them and the owner's VTX app could not read them
   (`market_history_<reason_code>`). For `market_history_app_required`, ask the
-  user to open VTX in a browser or the desktop app and rerun. Otherwise rerun
-  only its `affected_window` with `recommended_timeframe` as the explicit
+  user to open VTX in a browser or the desktop app and rerun. For
+  `market_history_device_read_busy`, the user's VTX app is open but had not
+  finished the read in time: rerun shortly at the same resolution. Otherwise
+  rerun only its `affected_window` with `recommended_timeframe` as the explicit
   `timeframe` and `analysis_scope=request_window`, keep the other rows from the
   original run, and label the coarser resolution.
 
