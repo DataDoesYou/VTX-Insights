@@ -452,6 +452,10 @@ platform:
    periods that change the answer. `likely_causes` ranks correlation only;
    confirm a named cause with the route that owns it (settings change, exit
    timing, execution quality) before stating it as the reason.
+   Before naming a cause for a run or drawdown, check the period's
+   `closes.opened_before_period` and `largest_closes`: a realized spike may be
+   a much older position being closed, not something that happened in the
+   period (`inherited_position_realized`).
 3. Treat `profile_days_unavailable`, `status: unavailable`, and
    `population_complete: false` as missing evidence, never as zero.
 
