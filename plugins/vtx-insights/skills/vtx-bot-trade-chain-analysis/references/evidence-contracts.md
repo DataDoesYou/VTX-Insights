@@ -274,8 +274,9 @@ When event detail is material, reconcile:
 - artifact manifest counts/bytes and deterministic source-content hash.
 
 Only direct persisted linkage, unique venue identity, or a Server protective
-leg's binding of its stop or take-profit fill to the entry decision it protects
-(linkage tier `protective_leg`) enters exact economics.
+leg's binding of its stop or take-profit fill (linkage tier `protective_leg`:
+to the entry decision it protects, or with no decision for a whole-position
+leg) enters exact economics.
 Keep correlated, ambiguous, conflicted, and unmatched rows enumerable but out of
 exact campaign economics. Funding remains unattributed unless a unique exact
 half-open position interval proves attribution. Zero retained funding does not
