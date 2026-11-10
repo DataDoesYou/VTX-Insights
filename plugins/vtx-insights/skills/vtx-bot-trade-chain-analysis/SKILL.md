@@ -818,6 +818,53 @@ Use `High confidence` only when detailed chains, a material cohort, profitable
 counterexamples, and validation agree. Use `Do not change yet` when the sample
 or generation is too new.
 
+### Decision Replay Route
+
+Use `decision.replay` to test a proposed prompt, model, or model-setting change
+on the decisions the bot already made, before the user applies it. A replay
+calls models on the bot's own keys, or on the owner's own inference host for a
+host model (a Server Mode bot pays its call fee per call either way), so start
+one only when the user explicitly asks for it, with the exact variants they
+approved.
+
+1. Choose the decisions the change must fix and those it must keep. Use
+   `decision.replay.positions` for decisions on held positions (by `actions`,
+   `sides`, `depth_pct_min`/`depth_pct_max`, `giveback_pct_min`/`giveback_pct_max`,
+   `at_peak`, `first_underwater_hold`, `outcomes`, `recovered_to_win`), or
+   `decision.replay.scenarios` for executed entries labelled by the market path
+   after them. For `decision.replay.positions`, keep `per_campaign` and `seed`
+   so the sample can be drawn again, and report `incomplete_reasons` and
+   `counts`: a decision a filter could not judge is counted there, never a
+   non-match. Save the chosen set with
+   `decision.replay.sets.save` when it will be replayed after later changes.
+2. Express each change as a variant. Edit the Main system prompt setting with
+   `settings_patch` (path `trading_system_prompt`: `set`, `append`, or
+   `find`/`replace` once) rather than editing the rendered prompt, and name a
+   host model with `controller` (`inference.status` lists the owner's hosts'
+   models) instead of `model`; add
+   `current_baseline: true`, and `settings_base: "current"` on variants, when the
+   bot's settings have changed since the decisions, so the change is measured
+   against the bot as it is now. A variant `not_applicable` for a scenario says
+   why; never rewrite it to force a match.
+3. Start it through `analysis.start` with an `idempotency_key`, poll
+   `analysis.status`, then read the artifact.
+4. Read each arm against the arm in `compared_with`: `repeat_rate` and
+   `comparison` for whether the original action repeats, and `scoring` for
+   held positions (`action_shares`, `mean_cut_share`, `cut_value_usd` and its
+   change, `harm`, `harm_unjudged`) and entries (`keep_share`, `net_kept_usd`).
+   Report every null and unknown as unavailable, never as zero. A `baseline`
+   arm with `status: "recorded"` was not asked again (an Agent mode decision,
+   or a host model no host of the owner's serves now; its `reason` says which):
+   it is the decision as recorded, `baseline_reproduced` is null, and only the
+   variants that name a model were asked, so read those by their own
+   `repeat_rate` against the recorded decision, never as a change from a
+   baseline.
+
+A replay's readings are the model's answers to past situations, not what would
+have happened next: never present `cut_value_usd` or `net_kept_usd` as realized
+or forecast PnL, and recommend a live change only with a prospective checkpoint
+measured after it becomes effective.
+
 ## Claim Labels
 
 - Distinguish historical account/position snapshot retention from parseability
