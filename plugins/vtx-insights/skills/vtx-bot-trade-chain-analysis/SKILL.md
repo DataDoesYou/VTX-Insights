@@ -881,8 +881,11 @@ windows, and step interval they approved.
    refused before anything is asked, naming what is missing.
 2. Express each version as a variant: `settings_base` `current` (the bot as it
    is now) or `defaults`, with `settings_patch` edits of any AI-page setting.
-   Include an unchanged control, the bot as it is or the default prompt. Every
-   version trades the same symbols over the same windows.
+   Name a different model with `model` (a provider model) or `controller` (one
+   of the owner's inference-host models, as `inference.status` lists them), not
+   by patching the model settings. Include an unchanged control, the bot as it
+   is or the default prompt. Every version trades the same symbols over the
+   same windows.
 3. Start it through `analysis.start` with an `idempotency_key`, poll
    `analysis.status` (its progress counts steps), then read the artifact. A
    backtest interrupted by a VTX update carries on from its last finished steps.
