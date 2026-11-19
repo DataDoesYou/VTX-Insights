@@ -1,6 +1,6 @@
 ---
 name: vtx-bot-trade-chain-analysis
-description: Reconstruct complete VTX bot trade chains to explain wins, losses, overtrading, low-liquidity entries, execution problems, settings-generation effects, and systemic failure modes. Use when the user asks why one or many bots are performing well or poorly, requests a deep bot review, wants recent settings judged only after they became effective, or needs evidence-backed keep, tune, pause, or optimization recommendations.
+description: Reconstruct complete VTX bot trade chains to explain wins, losses, overtrading, low-liquidity entries, execution problems, settings-generation effects, and systemic failure modes. Use when the user asks why one or many bots are performing well or poorly, requests a deep bot review, wants recent settings judged only after they became effective, wants a prompt, setting, or model change tested with a decision replay or backtest before applying it, or needs evidence-backed keep, tune, pause, or optimization recommendations.
 ---
 
 # VTX Bot Trade-Chain Analysis
@@ -864,6 +864,41 @@ A replay's readings are the model's answers to past situations, not what would
 have happened next: never present `cut_value_usd` or `net_kept_usd` as realized
 or forecast PnL, and recommend a live change only with a prospective checkpoint
 measured after it becomes effective.
+
+### Decision Backtest Route
+
+Use `decision.backtest` to test whether a prompt, setting, or model change makes
+money over whole past markets, not only on single decisions: it runs the bot's
+Main prompt step by step over past windows on a simulated account and reports
+each version's trades and equity. Like a replay, it asks the bot's own model on
+its own keys at every step (a Server Mode bot pays its call fee per step), so
+start one only when the user explicitly asks for it, with the exact versions,
+windows, and step interval they approved.
+
+1. Pick windows of both kinds, trending and choppy or falling, at least two of
+   each, so a version that only cuts losers or only rides trends shows it. A
+   backtest reads only VTX's stored candles: a window it lacks candles for is
+   refused before anything is asked, naming what is missing.
+2. Express each version as a variant: `settings_base` `current` (the bot as it
+   is now) or `defaults`, with `settings_patch` edits of any AI-page setting.
+   Include an unchanged control, the bot as it is or the default prompt. Every
+   version trades the same symbols over the same windows.
+3. Start it through `analysis.start` with an `idempotency_key`, poll
+   `analysis.status` (its progress counts steps), then read the artifact. A
+   backtest interrupted by a VTX update carries on from its last finished steps.
+4. Judge each version window by window against the control: net after fees,
+   the average winner against the average loser, hold times, adds, the worst
+   drawdown, and time in the market, and read the trade chains (each step's
+   decisions and reasoning) before a verdict. Count each path's step `error`s:
+   a step the model did not answer is not a HOLD. When the same version ran
+   more than once, the spread between those runs is the noise, and a difference
+   inside it is a tie.
+
+A backtest is the model's answers to past markets on a simulated account, with
+no funding, slippage, partial fills, or liquidation: never present its PnL as
+realized or forecast, and recommend a live change only when it beats the control
+in both kinds of window, with a prospective checkpoint measured after it becomes
+effective.
 
 ## Claim Labels
 
