@@ -876,9 +876,11 @@ start one only when the user explicitly asks for it, with the exact versions,
 windows, and step interval they approved.
 
 1. Pick windows of both kinds, trending and choppy or falling, at least two of
-   each, so a version that only cuts losers or only rides trends shows it. A
-   backtest reads only VTX's stored candles: a window it lacks candles for is
-   refused before anything is asked, naming what is missing.
+   each, so a version that only cuts losers or only rides trends shows it.
+   Candles VTX has not stored are read first (by the owner's open app for a
+   Client Mode Hyperliquid bot, by the bot's MetaTrader 5 terminal, otherwise
+   by VTX); a window a candle still can't be had for is refused before
+   anything is asked, naming what is missing.
 2. Express each version as a variant: `settings_base` `current` (the bot as it
    is now) or `defaults`, with `settings_patch` edits of any AI-page setting.
    Name a different model with `model` (a provider model) or `controller` (one
@@ -887,8 +889,10 @@ windows, and step interval they approved.
    is or the default prompt. Every version trades the same symbols over the
    same windows.
 3. Start it through `analysis.start` with an `idempotency_key`, poll
-   `analysis.status` (its progress counts steps), then read the artifact. A
-   backtest interrupted by a VTX update carries on from its last finished steps.
+   `analysis.status` (its progress counts steps, and `progress.waiting_for`
+   says what a paused run waits for, such as the owner's app or, for a Server
+   Mode bot, VTX credit), then read the artifact. A backtest interrupted by a
+   VTX update carries on from its last finished steps.
 4. Judge each version window by window against the control: net after fees,
    the average winner against the average loser, hold times, adds, the worst
    drawdown, and time in the market, and read the trade chains (each step's
