@@ -878,8 +878,9 @@ windows, and step interval they approved.
 1. Pick windows of both kinds, trending and choppy or falling, at least two of
    each, so a version that only cuts losers or only rides trends shows it.
    Candles VTX has not stored are read first (by the owner's open app for a
-   Client Mode Hyperliquid bot, by the bot's MetaTrader 5 terminal, otherwise
-   by VTX); a window a candle still can't be had for is refused before
+   Client Mode Hyperliquid bot, by the bot's MetaTrader 5 terminal, by VTX for
+   a Server Mode bot; a Client Mode bot on another exchange runs on what VTX
+   stores); a window a candle still can't be had for is refused before
    anything is asked, naming what is missing.
 2. Express each version as a variant: `settings_base` `current` (the bot as it
    is now) or `defaults`, with `settings_patch` edits of any AI-page setting.
